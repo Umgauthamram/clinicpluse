@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ClinicPulse: Health Analytics Dashboard
 
-## Getting Started
+## 📋 Project Overview
+**Problem Statement**: Small community clinics lack tools to understand disease patterns such as seasonal outbreaks or common symptoms. ClinicPulse provides a data-driven platform to identify trends, correlate symptoms with diseases, and provide automated treatment protocols to support early diagnosis and treatment planning.
 
-First, run the development server:
+This project analyzes clinical data to identify seasonal trends (e.g., Flu season vs. Allergy peaks) and converts raw data into actionable medical insights.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Data Methodology
+### 1. Data Cleaning & Preparation
+- **Inconsistent Formats**: Standardized symptom names and location fields.
+- **Missing Values**: Handled using logical imputation.
+- **Normalization**: Grouped data by symptoms and months for temporal analysis.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### 2. Dataset Specification
+- **Primary Source**: `public/clinic_insight.json`
+- **Features**: Date, Symptom, Location, Count/Month.
+- **Synthetic Base**: The dataset simulates comprehensive clinic records across multiple months (Full Year 2026).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 📊 Insights & Analysis
+The platform automatically detects:
+1. **Seasonal Spikes**: Identifies when a specific symptom exceeds baseline frequency.
+2. **Correlation Patterns**: Links related symptoms (e.g., Sneezing + Itchy Eyes) to probable conditions like Allergic Rhinitis.
+3. **Forecasting**: Extrapolates current trends to predict upcoming clinic volume.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📤 Live Data Integration
+ClinicPulse features a robust **Data Upload System** that allows medical staff to update the platform with new findings:
+- **Automatic Merging**: Uploaded JSON files are automatically saved to the system database.
+- **Security**: Includes a multi-step confirmation process with data preview to ensure accuracy before merging.
+- **Real-time Updates**: Once confirmed, all dashboard metrics, AI insights, and reports update instantly without manual processing.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🚀 Technical Stack
+- **Frontend**: Next.js (React Framework)
+- **Styling**: Vanilla CSS with modern aesthetics.
+- **Visualizations**: Recharts for dynamic medical trending.
+- **Intelligence**: Rule-based AI Diagnosis Engine.
+- **Backend API**: Next.js Route Handlers for file-system data management.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📂 Project Structure
+- `public/clinic_insight.json`: Live data source for the analytics engine.
+- `app/api/upload/route.js`: Server-side logic for automatic data updates.
+- `app/insights/page.js`: AI-driven diagnosis and prediction module.
+- `app/trends/page.js`: Heatmaps and seasonal spike detection.
+- `app/upload/page.js`: User-facing data management portal.

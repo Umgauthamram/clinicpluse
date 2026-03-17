@@ -1,0 +1,53 @@
+{
+    "diseases": [
+        {
+            "id": "common-cold",
+            "name": "Common Cold",
+            "symptoms": [
+                "Runny Nose",
+                "Sneezing",
+                "Cough"
+            ],
+            "curing": "Rest, hydration, and steam inhalation. Most cases resolve within 7-10 days.",
+            "medicine": "Antihistamines, Decongestants, Vitamin C supplements.",
+            "severity": "Low"
+        },
+        {
+            "id": "influenza",
+            "name": "Influenza (Flu)",
+            "symptoms": [
+                "Fever",
+                "Body Ache",
+                "Fatigue",
+                "Cough"
+            ],
+            "curing": "Complete bed rest, high fluid intake, and monitoring temperature.",
+            "medicine": "Antivirals (Oseltamivir), Ibuprofen for aches, Cough suppressants.",
+            "severity": "Medium"
+        },
+        {
+            "id": "allergic-rhinitis",
+            "name": "Allergic Rhinitis",
+            "symptoms": [
+                "Itchy Eyes",
+                "Sneezing",
+                "Runny Nose"
+            ],
+            "curing": "Avoiding known allergens, using air purifiers, and saline nasal rinses.",
+            "medicine": "Loratadine, Cetirizine, Nasal Corticosteroid sprays.",
+            "severity": "Low"
+        },
+        {
+            "id": "viral-fever",
+            "name": "Viral Fever",
+            "symptoms": [
+                "Fever",
+                "Body Ache",
+                "Fatigue"
+            ],
+            "curing": "Lukewarm sponge baths, light diet, and adequate sleep.",
+            "medicine": "Paracetamol, Electrolyte solutions, rest.",
+            "severity": "Medium"
+        }
+    ]
+}

@@ -1,0 +1,1001 @@
+Date,Month,Symptom,Severity
+2026-12-19,December,Fatigue,8
+2026-03-06,March,Itchy Eyes,1
+2026-08-16,August,Runny Nose,5
+2026-02-10,February,Body Ache,7
+2026-04-12,April,Itchy Eyes,2
+2026-04-01,April,Sneezing,3
+2026-05-13,May,Runny Nose,1
+2026-03-10,March,Itchy Eyes,1
+2026-02-12,February,Body Ache,3
+2026-01-19,January,Fever,4
+2026-07-14,July,Fatigue,7
+2026-10-21,October,Itchy Eyes,6
+2026-06-18,June,Body Ache,8
+2026-08-18,August,Runny Nose,3
+2026-03-27,March,Sneezing,6
+2026-11-25,November,Body Ache,8
+2026-07-17,July,Body Ache,9
+2026-05-05,May,Fatigue,3
+2026-02-24,February,Fever,4
+2026-10-16,October,Runny Nose,1
+2026-01-05,January,Cough,2
+2026-02-20,February,Sneezing,3
+2026-05-18,May,Fatigue,4
+2026-02-11,February,Itchy Eyes,1
+2026-10-18,October,Itchy Eyes,5
+2026-10-18,October,Fatigue,10
+2026-03-28,March,Fatigue,8
+2026-10-05,October,Fever,1
+2026-07-12,July,Body Ache,6
+2026-11-15,November,Sneezing,1
+2026-02-23,February,Cough,5
+2026-02-06,February,Fever,1
+2026-06-18,June,Itchy Eyes,7
+2026-05-28,May,Sneezing,9
+2026-10-14,October,Itchy Eyes,6
+2026-05-03,May,Fatigue,4
+2026-10-18,October,Fatigue,4
+2026-05-27,May,Cough,5
+2026-01-14,January,Fever,5
+2026-12-06,December,Fatigue,10
+2026-01-14,January,Itchy Eyes,9
+2026-04-28,April,Sneezing,9
+2026-12-02,December,Runny Nose,4
+2026-08-11,August,Cough,8
+2026-11-20,November,Body Ache,4
+2026-11-02,November,Body Ache,7
+2026-01-10,January,Fatigue,3
+2026-12-13,December,Fever,7
+2026-11-20,November,Body Ache,8
+2026-08-17,August,Cough,4
+2026-05-13,May,Itchy Eyes,1
+2026-07-22,July,Itchy Eyes,4
+2026-02-25,February,Fever,6
+2026-12-06,December,Body Ache,6
+2026-06-17,June,Fatigue,9
+2026-11-07,November,Fever,6
+2026-05-26,May,Itchy Eyes,4
+2026-12-04,December,Cough,10
+2026-04-26,April,Body Ache,7
+2026-06-09,June,Runny Nose,10
+2026-08-03,August,Fever,2
+2026-07-19,July,Cough,3
+2026-04-15,April,Runny Nose,4
+2026-08-28,August,Fatigue,2
+2026-02-04,February,Fever,9
+2026-01-13,January,Fatigue,7
+2026-07-14,July,Fatigue,1
+2026-06-24,June,Itchy Eyes,6
+2026-06-17,June,Runny Nose,7
+2026-05-03,May,Itchy Eyes,7
+2026-07-25,July,Sneezing,3
+2026-10-09,October,Fatigue,1
+2026-05-21,May,Itchy Eyes,5
+2026-09-19,September,Fever,9
+2026-03-04,March,Sneezing,2
+2026-06-03,June,Sneezing,6
+2026-07-04,July,Fatigue,3
+2026-12-08,December,Fever,4
+2026-07-17,July,Fatigue,10
+2026-04-06,April,Body Ache,2
+2026-09-04,September,Fever,10
+2026-04-20,April,Runny Nose,2
+2026-02-28,February,Cough,1
+2026-05-05,May,Itchy Eyes,5
+2026-01-28,January,Fever,9
+2026-04-27,April,Runny Nose,6
+2026-10-19,October,Fatigue,6
+2026-05-12,May,Fatigue,7
+2026-08-28,August,Fever,1
+2026-09-27,September,Fatigue,9
+2026-05-16,May,Runny Nose,6
+2026-06-19,June,Sneezing,7
+2026-06-23,June,Itchy Eyes,8
+2026-12-25,December,Runny Nose,1
+2026-09-10,September,Fatigue,8
+2026-12-06,December,Cough,1
+2026-10-25,October,Fever,2
+2026-09-02,September,Fever,4
+2026-10-25,October,Cough,6
+2026-03-09,March,Sneezing,3
+2026-04-19,April,Itchy Eyes,2
+2026-06-24,June,Body Ache,2
+2026-05-14,May,Runny Nose,8
+2026-03-02,March,Itchy Eyes,5
+2026-10-04,October,Sneezing,2
+2026-09-16,September,Fatigue,7
+2026-03-24,March,Sneezing,4
+2026-05-17,May,Runny Nose,8
+2026-03-20,March,Itchy Eyes,5
+2026-12-27,December,Cough,7
+2026-11-02,November,Fatigue,1
+2026-05-07,May,Sneezing,3
+2026-10-20,October,Itchy Eyes,4
+2026-11-22,November,Fever,7
+2026-03-09,March,Runny Nose,1
+2026-03-12,March,Runny Nose,9
+2026-04-26,April,Sneezing,9
+2026-09-22,September,Itchy Eyes,9
+2026-12-01,December,Cough,2
+2026-08-16,August,Cough,2
+2026-01-14,January,Cough,3
+2026-08-03,August,Sneezing,7
+2026-06-25,June,Itchy Eyes,3
+2026-07-21,July,Fever,8
+2026-01-12,January,Fever,2
+2026-10-17,October,Sneezing,8
+2026-10-22,October,Sneezing,1
+2026-06-15,June,Sneezing,5
+2026-03-10,March,Itchy Eyes,8
+2026-01-26,January,Sneezing,10
+2026-11-15,November,Fatigue,7
+2026-06-21,June,Sneezing,4
+2026-01-21,January,Fever,5
+2026-04-13,April,Runny Nose,10
+2026-10-25,October,Fever,4
+2026-03-07,March,Sneezing,8
+2026-12-08,December,Sneezing,5
+2026-11-01,November,Fever,10
+2026-01-24,January,Cough,10
+2026-04-27,April,Runny Nose,9
+2026-10-15,October,Fatigue,8
+2026-09-17,September,Fatigue,1
+2026-02-16,February,Fever,4
+2026-10-27,October,Fatigue,2
+2026-05-08,May,Cough,1
+2026-03-01,March,Sneezing,6
+2026-09-12,September,Body Ache,10
+2026-01-24,January,Cough,2
+2026-03-18,March,Sneezing,9
+2026-02-21,February,Fever,3
+2026-04-26,April,Fever,6
+2026-11-26,November,Fever,8
+2026-01-05,January,Runny Nose,1
+2026-05-13,May,Sneezing,5
+2026-04-11,April,Itchy Eyes,4
+2026-06-01,June,Cough,1
+2026-01-15,January,Fatigue,4
+2026-04-09,April,Runny Nose,10
+2026-08-24,August,Body Ache,6
+2026-09-15,September,Runny Nose,9
+2026-01-08,January,Fever,9
+2026-09-12,September,Sneezing,9
+2026-01-27,January,Body Ache,9
+2026-12-19,December,Itchy Eyes,10
+2026-10-06,October,Cough,2
+2026-07-14,July,Runny Nose,10
+2026-11-02,November,Fever,7
+2026-09-21,September,Fever,6
+2026-10-11,October,Fever,9
+2026-01-21,January,Itchy Eyes,8
+2026-05-02,May,Runny Nose,5
+2026-01-18,January,Fever,8
+2026-01-12,January,Cough,5
+2026-09-19,September,Itchy Eyes,5
+2026-06-20,June,Body Ache,3
+2026-11-08,November,Itchy Eyes,4
+2026-12-11,December,Runny Nose,4
+2026-06-08,June,Cough,8
+2026-12-22,December,Sneezing,9
+2026-04-26,April,Itchy Eyes,3
+2026-08-26,August,Cough,9
+2026-01-25,January,Body Ache,8
+2026-08-20,August,Sneezing,8
+2026-08-13,August,Fatigue,2
+2026-10-17,October,Runny Nose,3
+2026-12-01,December,Sneezing,4
+2026-04-11,April,Fever,5
+2026-10-17,October,Runny Nose,7
+2026-05-28,May,Fatigue,10
+2026-12-22,December,Fever,8
+2026-09-06,September,Fever,2
+2026-02-07,February,Fever,6
+2026-09-17,September,Fatigue,4
+2026-04-28,April,Itchy Eyes,4
+2026-07-13,July,Cough,3
+2026-05-27,May,Fatigue,4
+2026-10-15,October,Fatigue,6
+2026-06-17,June,Runny Nose,7
+2026-06-19,June,Fever,3
+2026-01-03,January,Body Ache,4
+2026-11-23,November,Fatigue,5
+2026-10-24,October,Fatigue,4
+2026-01-25,January,Fever,8
+2026-10-12,October,Body Ache,4
+2026-06-19,June,Cough,3
+2026-11-25,November,Itchy Eyes,7
+2026-05-09,May,Itchy Eyes,5
+2026-04-16,April,Itchy Eyes,9
+2026-09-10,September,Fatigue,4
+2026-08-12,August,Fever,3
+2026-06-28,June,Fever,7
+2026-02-21,February,Cough,7
+2026-05-01,May,Itchy Eyes,3
+2026-11-27,November,Body Ache,8
+2026-11-12,November,Body Ache,6
+2026-12-06,December,Runny Nose,3
+2026-02-17,February,Runny Nose,5
+2026-07-27,July,Cough,2
+2026-10-25,October,Runny Nose,5
+2026-11-24,November,Itchy Eyes,9
+2026-11-14,November,Runny Nose,2
+2026-08-02,August,Runny Nose,4
+2026-01-28,January,Body Ache,3
+2026-07-25,July,Cough,2
+2026-01-15,January,Fever,5
+2026-06-10,June,Body Ache,3
+2026-08-17,August,Runny Nose,1
+2026-09-19,September,Fatigue,2
+2026-03-03,March,Runny Nose,7
+2026-08-23,August,Runny Nose,10
+2026-12-28,December,Fever,9
+2026-08-16,August,Fever,8
+2026-11-16,November,Sneezing,6
+2026-09-15,September,Fever,6
+2026-12-09,December,Fever,8
+2026-04-06,April,Runny Nose,2
+2026-11-16,November,Cough,4
+2026-12-07,December,Runny Nose,8
+2026-04-14,April,Runny Nose,9
+2026-03-16,March,Fever,7
+2026-09-22,September,Fever,9
+2026-07-12,July,Cough,7
+2026-09-25,September,Cough,7
+2026-06-12,June,Body Ache,5
+2026-11-14,November,Runny Nose,10
+2026-11-25,November,Body Ache,10
+2026-05-25,May,Itchy Eyes,6
+2026-01-06,January,Body Ache,3
+2026-02-14,February,Fatigue,6
+2026-05-22,May,Itchy Eyes,9
+2026-01-23,January,Fever,7
+2026-09-23,September,Sneezing,4
+2026-08-20,August,Sneezing,7
+2026-04-25,April,Fatigue,9
+2026-04-17,April,Runny Nose,2
+2026-11-04,November,Fever,8
+2026-01-20,January,Body Ache,3
+2026-05-13,May,Sneezing,6
+2026-11-03,November,Sneezing,7
+2026-06-15,June,Runny Nose,5
+2026-11-24,November,Body Ache,6
+2026-10-23,October,Fatigue,8
+2026-01-23,January,Cough,4
+2026-04-02,April,Itchy Eyes,6
+2026-08-23,August,Body Ache,5
+2026-06-03,June,Fatigue,3
+2026-04-27,April,Runny Nose,7
+2026-02-06,February,Cough,8
+2026-03-18,March,Itchy Eyes,10
+2026-04-28,April,Itchy Eyes,7
+2026-12-01,December,Fever,1
+2026-08-20,August,Body Ache,3
+2026-05-23,May,Sneezing,1
+2026-03-22,March,Sneezing,10
+2026-08-01,August,Runny Nose,5
+2026-11-08,November,Cough,1
+2026-06-06,June,Fatigue,4
+2026-11-12,November,Sneezing,8
+2026-08-18,August,Cough,1
+2026-10-23,October,Body Ache,8
+2026-09-25,September,Fatigue,9
+2026-09-03,September,Cough,8
+2026-01-02,January,Cough,1
+2026-08-06,August,Cough,9
+2026-04-01,April,Sneezing,9
+2026-03-22,March,Fatigue,6
+2026-08-05,August,Sneezing,2
+2026-10-17,October,Runny Nose,9
+2026-04-08,April,Runny Nose,1
+2026-06-09,June,Runny Nose,6
+2026-04-15,April,Sneezing,1
+2026-12-27,December,Runny Nose,3
+2026-02-05,February,Fever,6
+2026-04-14,April,Cough,2
+2026-11-18,November,Runny Nose,8
+2026-05-27,May,Sneezing,3
+2026-06-10,June,Body Ache,2
+2026-06-03,June,Itchy Eyes,10
+2026-04-15,April,Cough,3
+2026-06-20,June,Itchy Eyes,8
+2026-04-24,April,Itchy Eyes,10
+2026-12-27,December,Cough,6
+2026-07-24,July,Body Ache,4
+2026-02-25,February,Runny Nose,2
+2026-04-23,April,Sneezing,4
+2026-08-12,August,Sneezing,9
+2026-12-22,December,Fever,2
+2026-12-16,December,Fatigue,2
+2026-08-17,August,Itchy Eyes,5
+2026-11-04,November,Body Ache,7
+2026-09-08,September,Runny Nose,8
+2026-07-25,July,Fatigue,10
+2026-09-07,September,Body Ache,9
+2026-03-24,March,Runny Nose,2
+2026-03-22,March,Runny Nose,6
+2026-11-09,November,Runny Nose,6
+2026-04-02,April,Cough,1
+2026-07-12,July,Body Ache,9
+2026-09-27,September,Fatigue,2
+2026-12-18,December,Fever,5
+2026-04-17,April,Sneezing,5
+2026-12-18,December,Body Ache,9
+2026-11-22,November,Itchy Eyes,8
+2026-09-02,September,Fever,2
+2026-08-12,August,Body Ache,4
+2026-10-16,October,Fever,6
+2026-08-19,August,Cough,2
+2026-05-19,May,Fatigue,5
+2026-05-08,May,Sneezing,2
+2026-02-12,February,Fatigue,1
+2026-08-18,August,Fatigue,10
+2026-01-04,January,Fever,7
+2026-02-27,February,Fever,10
+2026-07-26,July,Runny Nose,5
+2026-08-13,August,Runny Nose,9
+2026-02-14,February,Itchy Eyes,8
+2026-12-15,December,Sneezing,4
+2026-12-01,December,Cough,2
+2026-02-18,February,Fatigue,2
+2026-01-02,January,Runny Nose,2
+2026-10-12,October,Itchy Eyes,9
+2026-03-14,March,Runny Nose,10
+2026-01-18,January,Fever,3
+2026-04-05,April,Runny Nose,7
+2026-06-14,June,Body Ache,3
+2026-11-26,November,Fever,8
+2026-12-03,December,Fever,5
+2026-11-26,November,Sneezing,7
+2026-11-02,November,Itchy Eyes,5
+2026-05-22,May,Fatigue,1
+2026-05-14,May,Runny Nose,2
+2026-11-25,November,Body Ache,6
+2026-10-16,October,Body Ache,3
+2026-03-15,March,Runny Nose,2
+2026-07-11,July,Fatigue,2
+2026-06-10,June,Fever,6
+2026-01-15,January,Fever,5
+2026-12-27,December,Fever,10
+2026-09-04,September,Body Ache,6
+2026-04-28,April,Itchy Eyes,1
+2026-04-22,April,Runny Nose,1
+2026-04-09,April,Sneezing,4
+2026-07-06,July,Body Ache,1
+2026-12-23,December,Fever,7
+2026-03-13,March,Fever,7
+2026-01-28,January,Fatigue,9
+2026-09-06,September,Fatigue,3
+2026-06-12,June,Fever,2
+2026-04-23,April,Runny Nose,8
+2026-03-23,March,Sneezing,1
+2026-09-15,September,Itchy Eyes,10
+2026-01-05,January,Fever,8
+2026-06-19,June,Itchy Eyes,9
+2026-06-06,June,Runny Nose,6
+2026-07-11,July,Sneezing,9
+2026-03-01,March,Sneezing,5
+2026-12-22,December,Body Ache,6
+2026-04-16,April,Runny Nose,7
+2026-10-01,October,Sneezing,3
+2026-04-02,April,Runny Nose,8
+2026-12-11,December,Fever,3
+2026-08-27,August,Fatigue,7
+2026-02-10,February,Cough,6
+2026-10-05,October,Fatigue,7
+2026-01-21,January,Fatigue,8
+2026-12-21,December,Cough,8
+2026-07-02,July,Sneezing,6
+2026-05-12,May,Sneezing,3
+2026-05-27,May,Body Ache,9
+2026-03-06,March,Runny Nose,1
+2026-08-25,August,Fatigue,2
+2026-08-25,August,Fatigue,9
+2026-11-23,November,Fever,5
+2026-03-20,March,Itchy Eyes,6
+2026-11-02,November,Body Ache,3
+2026-07-08,July,Itchy Eyes,7
+2026-12-17,December,Fever,5
+2026-06-10,June,Cough,9
+2026-11-01,November,Runny Nose,7
+2026-04-28,April,Runny Nose,7
+2026-08-10,August,Runny Nose,8
+2026-06-07,June,Runny Nose,4
+2026-05-08,May,Fatigue,1
+2026-12-27,December,Sneezing,7
+2026-02-16,February,Cough,7
+2026-04-17,April,Sneezing,2
+2026-05-22,May,Sneezing,9
+2026-06-07,June,Itchy Eyes,9
+2026-10-26,October,Cough,10
+2026-07-23,July,Cough,10
+2026-12-24,December,Body Ache,1
+2026-12-08,December,Itchy Eyes,9
+2026-05-19,May,Sneezing,8
+2026-03-15,March,Itchy Eyes,9
+2026-02-12,February,Fever,5
+2026-04-21,April,Itchy Eyes,6
+2026-09-14,September,Body Ache,8
+2026-10-11,October,Itchy Eyes,5
+2026-03-26,March,Sneezing,9
+2026-12-18,December,Body Ache,5
+2026-12-07,December,Body Ache,10
+2026-06-23,June,Cough,7
+2026-01-12,January,Cough,8
+2026-08-23,August,Itchy Eyes,5
+2026-04-09,April,Itchy Eyes,5
+2026-09-19,September,Fatigue,6
+2026-12-26,December,Cough,6
+2026-05-22,May,Sneezing,1
+2026-09-04,September,Itchy Eyes,3
+2026-05-11,May,Fatigue,2
+2026-07-23,July,Sneezing,7
+2026-11-13,November,Fever,2
+2026-12-04,December,Fever,10
+2026-07-22,July,Sneezing,7
+2026-05-05,May,Itchy Eyes,7
+2026-03-03,March,Fatigue,6
+2026-07-01,July,Body Ache,10
+2026-01-05,January,Cough,3
+2026-03-05,March,Runny Nose,8
+2026-08-06,August,Runny Nose,9
+2026-04-21,April,Fatigue,7
+2026-09-17,September,Sneezing,1
+2026-10-08,October,Body Ache,10
+2026-07-18,July,Cough,8
+2026-01-06,January,Fever,1
+2026-07-02,July,Fever,10
+2026-04-07,April,Itchy Eyes,8
+2026-02-05,February,Cough,1
+2026-09-07,September,Fatigue,8
+2026-10-20,October,Fever,3
+2026-05-18,May,Fatigue,8
+2026-03-02,March,Runny Nose,6
+2026-05-19,May,Sneezing,4
+2026-08-06,August,Fever,3
+2026-02-12,February,Cough,4
+2026-05-01,May,Runny Nose,9
+2026-04-19,April,Fever,9
+2026-01-02,January,Body Ache,9
+2026-12-13,December,Itchy Eyes,10
+2026-07-17,July,Fever,4
+2026-10-12,October,Sneezing,5
+2026-11-02,November,Itchy Eyes,5
+2026-07-13,July,Fatigue,3
+2026-10-18,October,Runny Nose,6
+2026-01-22,January,Body Ache,8
+2026-06-25,June,Fatigue,3
+2026-06-01,June,Fatigue,5
+2026-05-26,May,Itchy Eyes,6
+2026-02-16,February,Fever,7
+2026-09-09,September,Sneezing,6
+2026-02-10,February,Cough,5
+2026-07-16,July,Sneezing,7
+2026-02-05,February,Body Ache,8
+2026-10-06,October,Runny Nose,9
+2026-10-13,October,Fever,5
+2026-11-06,November,Sneezing,8
+2026-11-18,November,Runny Nose,1
+2026-01-25,January,Fever,1
+2026-09-06,September,Itchy Eyes,3
+2026-07-03,July,Sneezing,4
+2026-01-21,January,Fever,9
+2026-11-26,November,Fatigue,1
+2026-06-18,June,Runny Nose,2
+2026-12-15,December,Body Ache,3
+2026-05-06,May,Sneezing,5
+2026-11-19,November,Cough,10
+2026-01-01,January,Cough,2
+2026-06-06,June,Runny Nose,9
+2026-08-12,August,Cough,2
+2026-10-21,October,Cough,8
+2026-07-18,July,Cough,10
+2026-01-09,January,Fever,10
+2026-11-02,November,Body Ache,10
+2026-08-10,August,Fatigue,2
+2026-09-25,September,Sneezing,4
+2026-03-25,March,Fatigue,2
+2026-12-07,December,Cough,9
+2026-05-04,May,Sneezing,8
+2026-07-11,July,Itchy Eyes,1
+2026-04-20,April,Sneezing,9
+2026-12-13,December,Cough,5
+2026-02-13,February,Cough,7
+2026-04-09,April,Cough,1
+2026-06-07,June,Body Ache,9
+2026-01-03,January,Itchy Eyes,10
+2026-06-24,June,Sneezing,9
+2026-05-05,May,Runny Nose,3
+2026-03-19,March,Fever,1
+2026-04-07,April,Itchy Eyes,3
+2026-08-25,August,Sneezing,10
+2026-02-17,February,Fever,2
+2026-10-24,October,Runny Nose,3
+2026-02-11,February,Body Ache,6
+2026-06-13,June,Cough,3
+2026-07-16,July,Sneezing,5
+2026-03-20,March,Sneezing,4
+2026-05-21,May,Sneezing,5
+2026-07-15,July,Sneezing,2
+2026-08-24,August,Fatigue,9
+2026-08-02,August,Runny Nose,2
+2026-11-12,November,Itchy Eyes,5
+2026-03-08,March,Sneezing,2
+2026-03-16,March,Sneezing,9
+2026-06-21,June,Cough,4
+2026-04-06,April,Itchy Eyes,3
+2026-07-06,July,Cough,3
+2026-06-14,June,Fever,3
+2026-09-20,September,Runny Nose,2
+2026-04-28,April,Itchy Eyes,6
+2026-02-25,February,Cough,10
+2026-05-18,May,Sneezing,1
+2026-12-26,December,Fever,6
+2026-02-22,February,Cough,10
+2026-07-15,July,Body Ache,1
+2026-05-10,May,Sneezing,1
+2026-04-05,April,Runny Nose,1
+2026-08-12,August,Body Ache,6
+2026-01-08,January,Cough,6
+2026-07-09,July,Sneezing,7
+2026-01-26,January,Cough,10
+2026-01-20,January,Runny Nose,9
+2026-02-13,February,Fever,4
+2026-04-27,April,Sneezing,7
+2026-01-21,January,Fever,4
+2026-10-22,October,Itchy Eyes,10
+2026-06-09,June,Fatigue,1
+2026-08-22,August,Cough,9
+2026-11-05,November,Fatigue,1
+2026-05-11,May,Itchy Eyes,9
+2026-11-08,November,Runny Nose,9
+2026-08-05,August,Fatigue,1
+2026-11-16,November,Cough,1
+2026-09-14,September,Cough,4
+2026-07-12,July,Fever,9
+2026-02-14,February,Itchy Eyes,4
+2026-08-22,August,Runny Nose,2
+2026-08-16,August,Sneezing,8
+2026-12-22,December,Body Ache,7
+2026-10-23,October,Fever,7
+2026-09-14,September,Cough,1
+2026-04-01,April,Runny Nose,3
+2026-09-03,September,Cough,8
+2026-02-06,February,Cough,5
+2026-08-23,August,Itchy Eyes,7
+2026-08-03,August,Runny Nose,9
+2026-06-20,June,Body Ache,8
+2026-07-04,July,Cough,6
+2026-07-14,July,Fever,10
+2026-08-21,August,Itchy Eyes,10
+2026-05-13,May,Runny Nose,4
+2026-06-18,June,Itchy Eyes,2
+2026-12-10,December,Fever,9
+2026-06-13,June,Itchy Eyes,2
+2026-07-23,July,Sneezing,2
+2026-01-03,January,Cough,6
+2026-07-18,July,Fatigue,6
+2026-10-15,October,Body Ache,8
+2026-06-03,June,Runny Nose,2
+2026-02-22,February,Runny Nose,10
+2026-06-17,June,Runny Nose,7
+2026-12-05,December,Sneezing,4
+2026-04-14,April,Fatigue,5
+2026-01-13,January,Cough,7
+2026-11-25,November,Runny Nose,1
+2026-04-06,April,Runny Nose,2
+2026-12-06,December,Body Ache,2
+2026-07-09,July,Fatigue,6
+2026-11-13,November,Fever,8
+2026-12-25,December,Cough,6
+2026-09-03,September,Sneezing,5
+2026-06-18,June,Body Ache,4
+2026-01-02,January,Sneezing,4
+2026-02-27,February,Fatigue,10
+2026-10-07,October,Runny Nose,7
+2026-12-18,December,Fever,4
+2026-08-01,August,Sneezing,6
+2026-06-11,June,Fever,6
+2026-10-23,October,Sneezing,8
+2026-03-06,March,Sneezing,9
+2026-12-03,December,Cough,10
+2026-04-13,April,Itchy Eyes,2
+2026-12-19,December,Cough,2
+2026-01-01,January,Cough,2
+2026-07-28,July,Body Ache,4
+2026-03-03,March,Cough,3
+2026-09-23,September,Sneezing,2
+2026-11-13,November,Sneezing,8
+2026-05-13,May,Fever,4
+2026-04-11,April,Runny Nose,9
+2026-03-12,March,Runny Nose,4
+2026-07-15,July,Body Ache,4
+2026-05-15,May,Itchy Eyes,1
+2026-12-18,December,Fever,6
+2026-11-26,November,Runny Nose,9
+2026-05-19,May,Cough,9
+2026-08-09,August,Fatigue,1
+2026-06-23,June,Itchy Eyes,1
+2026-09-24,September,Sneezing,4
+2026-06-22,June,Body Ache,8
+2026-01-27,January,Fever,1
+2026-08-18,August,Runny Nose,4
+2026-05-25,May,Fatigue,3
+2026-02-08,February,Body Ache,7
+2026-08-21,August,Runny Nose,6
+2026-02-28,February,Fever,8
+2026-10-23,October,Itchy Eyes,3
+2026-08-20,August,Itchy Eyes,9
+2026-09-22,September,Runny Nose,3
+2026-05-02,May,Runny Nose,2
+2026-05-08,May,Cough,10
+2026-11-01,November,Sneezing,6
+2026-03-05,March,Itchy Eyes,6
+2026-08-04,August,Body Ache,10
+2026-06-28,June,Itchy Eyes,4
+2026-05-07,May,Runny Nose,9
+2026-12-22,December,Cough,5
+2026-04-16,April,Runny Nose,3
+2026-11-20,November,Fever,3
+2026-12-11,December,Fatigue,6
+2026-09-13,September,Body Ache,8
+2026-01-28,January,Body Ache,2
+2026-12-01,December,Fever,3
+2026-06-12,June,Runny Nose,5
+2026-03-09,March,Sneezing,5
+2026-07-04,July,Sneezing,7
+2026-08-02,August,Itchy Eyes,6
+2026-10-05,October,Body Ache,8
+2026-05-12,May,Sneezing,8
+2026-02-13,February,Body Ache,4
+2026-09-24,September,Runny Nose,8
+2026-08-26,August,Cough,4
+2026-11-14,November,Cough,9
+2026-02-28,February,Fever,2
+2026-03-09,March,Fever,4
+2026-10-08,October,Fatigue,8
+2026-11-12,November,Sneezing,10
+2026-09-05,September,Body Ache,4
+2026-07-23,July,Fatigue,1
+2026-06-14,June,Body Ache,3
+2026-11-28,November,Body Ache,3
+2026-01-18,January,Fever,2
+2026-08-25,August,Sneezing,10
+2026-01-05,January,Body Ache,6
+2026-10-28,October,Fatigue,9
+2026-03-13,March,Itchy Eyes,5
+2026-12-17,December,Runny Nose,8
+2026-04-18,April,Sneezing,7
+2026-01-23,January,Runny Nose,1
+2026-07-07,July,Fever,2
+2026-06-26,June,Itchy Eyes,1
+2026-02-07,February,Fever,6
+2026-02-03,February,Fatigue,7
+2026-01-14,January,Cough,9
+2026-10-24,October,Body Ache,4
+2026-06-26,June,Fever,5
+2026-06-26,June,Runny Nose,5
+2026-02-15,February,Runny Nose,10
+2026-05-09,May,Fatigue,2
+2026-02-23,February,Fatigue,8
+2026-08-05,August,Fever,5
+2026-04-04,April,Sneezing,8
+2026-03-05,March,Sneezing,6
+2026-07-12,July,Fever,7
+2026-11-26,November,Fever,9
+2026-06-12,June,Fatigue,6
+2026-03-11,March,Cough,5
+2026-05-08,May,Runny Nose,8
+2026-11-22,November,Body Ache,9
+2026-04-10,April,Itchy Eyes,2
+2026-02-15,February,Fever,6
+2026-06-22,June,Fatigue,10
+2026-05-02,May,Sneezing,1
+2026-12-17,December,Fatigue,9
+2026-09-08,September,Fever,2
+2026-03-16,March,Itchy Eyes,2
+2026-10-04,October,Itchy Eyes,3
+2026-01-04,January,Body Ache,7
+2026-01-18,January,Runny Nose,2
+2026-03-26,March,Itchy Eyes,2
+2026-12-08,December,Runny Nose,8
+2026-12-06,December,Itchy Eyes,9
+2026-08-03,August,Sneezing,5
+2026-05-16,May,Sneezing,2
+2026-03-12,March,Sneezing,1
+2026-10-16,October,Body Ache,4
+2026-11-18,November,Fatigue,4
+2026-06-03,June,Fatigue,2
+2026-07-20,July,Cough,9
+2026-06-27,June,Body Ache,2
+2026-12-08,December,Fever,4
+2026-07-01,July,Itchy Eyes,6
+2026-06-14,June,Runny Nose,10
+2026-11-06,November,Body Ache,9
+2026-04-03,April,Fatigue,9
+2026-01-16,January,Fever,1
+2026-03-05,March,Sneezing,4
+2026-04-05,April,Itchy Eyes,2
+2026-06-20,June,Itchy Eyes,4
+2026-05-23,May,Itchy Eyes,7
+2026-03-01,March,Itchy Eyes,3
+2026-11-15,November,Body Ache,1
+2026-03-15,March,Runny Nose,1
+2026-03-22,March,Itchy Eyes,7
+2026-04-06,April,Itchy Eyes,6
+2026-09-13,September,Sneezing,3
+2026-06-10,June,Fever,5
+2026-12-09,December,Cough,3
+2026-01-27,January,Runny Nose,6
+2026-04-10,April,Sneezing,6
+2026-03-08,March,Sneezing,3
+2026-03-04,March,Sneezing,10
+2026-05-15,May,Sneezing,2
+2026-06-24,June,Runny Nose,10
+2026-11-16,November,Sneezing,1
+2026-08-05,August,Sneezing,4
+2026-04-27,April,Itchy Eyes,4
+2026-10-19,October,Fever,4
+2026-01-17,January,Cough,8
+2026-03-07,March,Cough,10
+2026-07-21,July,Itchy Eyes,1
+2026-11-27,November,Fever,9
+2026-02-23,February,Fatigue,10
+2026-04-09,April,Sneezing,8
+2026-11-20,November,Runny Nose,6
+2026-06-12,June,Body Ache,1
+2026-09-25,September,Cough,2
+2026-11-06,November,Itchy Eyes,3
+2026-01-18,January,Fever,5
+2026-04-22,April,Runny Nose,6
+2026-01-28,January,Cough,7
+2026-04-05,April,Sneezing,9
+2026-08-02,August,Body Ache,4
+2026-12-16,December,Cough,9
+2026-02-20,February,Itchy Eyes,7
+2026-01-05,January,Itchy Eyes,2
+2026-03-05,March,Cough,1
+2026-02-16,February,Body Ache,9
+2026-10-20,October,Runny Nose,1
+2026-05-26,May,Itchy Eyes,7
+2026-05-27,May,Itchy Eyes,5
+2026-09-19,September,Runny Nose,6
+2026-12-06,December,Runny Nose,9
+2026-03-14,March,Runny Nose,10
+2026-04-21,April,Runny Nose,3
+2026-03-14,March,Runny Nose,3
+2026-05-13,May,Cough,9
+2026-01-06,January,Cough,10
+2026-11-01,November,Fatigue,7
+2026-09-15,September,Cough,2
+2026-05-18,May,Fever,1
+2026-10-16,October,Fatigue,4
+2026-04-15,April,Fatigue,7
+2026-05-05,May,Itchy Eyes,9
+2026-02-15,February,Fatigue,5
+2026-06-28,June,Fever,5
+2026-08-19,August,Runny Nose,3
+2026-10-07,October,Body Ache,8
+2026-12-06,December,Fever,4
+2026-11-22,November,Body Ache,10
+2026-01-08,January,Fatigue,2
+2026-08-22,August,Body Ache,7
+2026-03-08,March,Itchy Eyes,3
+2026-09-21,September,Cough,9
+2026-01-23,January,Fever,8
+2026-01-03,January,Sneezing,8
+2026-01-17,January,Cough,5
+2026-07-02,July,Sneezing,2
+2026-10-21,October,Sneezing,2
+2026-05-17,May,Runny Nose,10
+2026-01-01,January,Fever,10
+2026-05-12,May,Runny Nose,10
+2026-11-15,November,Body Ache,10
+2026-06-06,June,Itchy Eyes,5
+2026-12-17,December,Fever,7
+2026-07-16,July,Sneezing,5
+2026-11-11,November,Body Ache,6
+2026-09-03,September,Sneezing,8
+2026-11-19,November,Itchy Eyes,2
+2026-12-07,December,Body Ache,10
+2026-12-09,December,Fatigue,10
+2026-11-09,November,Itchy Eyes,2
+2026-01-28,January,Body Ache,4
+2026-08-25,August,Runny Nose,8
+2026-01-03,January,Runny Nose,7
+2026-06-13,June,Fever,9
+2026-11-16,November,Fever,7
+2026-12-25,December,Fatigue,7
+2026-03-18,March,Sneezing,3
+2026-03-25,March,Runny Nose,3
+2026-07-16,July,Itchy Eyes,3
+2026-04-12,April,Cough,3
+2026-04-14,April,Itchy Eyes,7
+2026-07-08,July,Cough,2
+2026-05-09,May,Cough,9
+2026-03-14,March,Cough,9
+2026-09-18,September,Fever,7
+2026-05-21,May,Sneezing,9
+2026-10-21,October,Fever,9
+2026-02-12,February,Fever,4
+2026-09-01,September,Cough,3
+2026-10-24,October,Fever,6
+2026-03-22,March,Sneezing,1
+2026-04-06,April,Itchy Eyes,3
+2026-02-23,February,Fever,1
+2026-04-19,April,Cough,7
+2026-02-17,February,Runny Nose,10
+2026-12-10,December,Body Ache,7
+2026-04-26,April,Itchy Eyes,1
+2026-10-23,October,Body Ache,1
+2026-02-10,February,Fever,5
+2026-10-26,October,Cough,2
+2026-09-28,September,Cough,7
+2026-11-26,November,Itchy Eyes,1
+2026-08-02,August,Cough,9
+2026-09-16,September,Runny Nose,3
+2026-08-22,August,Sneezing,9
+2026-04-07,April,Sneezing,3
+2026-12-09,December,Fever,1
+2026-12-18,December,Cough,7
+2026-09-18,September,Cough,10
+2026-08-09,August,Fatigue,10
+2026-09-15,September,Fever,5
+2026-07-08,July,Body Ache,10
+2026-10-24,October,Body Ache,5
+2026-05-13,May,Itchy Eyes,9
+2026-12-13,December,Cough,6
+2026-02-26,February,Cough,5
+2026-08-22,August,Sneezing,6
+2026-07-27,July,Cough,5
+2026-08-16,August,Sneezing,2
+2026-06-05,June,Fatigue,3
+2026-12-17,December,Fever,10
+2026-02-02,February,Cough,9
+2026-02-10,February,Fever,3
+2026-04-20,April,Itchy Eyes,6
+2026-11-10,November,Fever,7
+2026-04-26,April,Fever,7
+2026-08-04,August,Cough,8
+2026-08-12,August,Itchy Eyes,6
+2026-12-01,December,Fever,5
+2026-03-20,March,Runny Nose,4
+2026-01-24,January,Fever,6
+2026-03-23,March,Runny Nose,9
+2026-07-17,July,Runny Nose,1
+2026-01-02,January,Fever,6
+2026-11-18,November,Itchy Eyes,10
+2026-06-17,June,Itchy Eyes,7
+2026-03-25,March,Fever,3
+2026-01-12,January,Fever,8
+2026-03-18,March,Runny Nose,2
+2026-08-12,August,Sneezing,4
+2026-08-03,August,Itchy Eyes,1
+2026-01-16,January,Body Ache,4
+2026-06-28,June,Fatigue,8
+2026-06-24,June,Fatigue,10
+2026-05-05,May,Fever,5
+2026-01-17,January,Fatigue,9
+2026-02-20,February,Fatigue,9
+2026-11-04,November,Itchy Eyes,6
+2026-06-10,June,Fever,8
+2026-03-06,March,Sneezing,6
+2026-08-06,August,Itchy Eyes,5
+2026-04-14,April,Cough,7
+2026-06-24,June,Fatigue,5
+2026-07-15,July,Body Ache,3
+2026-12-28,December,Runny Nose,9
+2026-07-23,July,Sneezing,2
+2026-11-09,November,Itchy Eyes,1
+2026-12-13,December,Runny Nose,4
+2026-04-17,April,Sneezing,7
+2026-02-07,February,Fever,6
+2026-04-13,April,Sneezing,9
+2026-09-03,September,Fatigue,5
+2026-03-11,March,Fever,8
+2026-04-02,April,Fatigue,1
+2026-05-09,May,Itchy Eyes,2
+2026-03-09,March,Sneezing,9
+2026-01-17,January,Cough,10
+2026-01-25,January,Fever,3
+2026-08-07,August,Fever,10
+2026-11-14,November,Cough,6
+2026-07-23,July,Runny Nose,2
+2026-01-22,January,Body Ache,7
+2026-09-09,September,Fever,3
+2026-10-18,October,Body Ache,1
+2026-02-10,February,Fever,6
+2026-06-25,June,Body Ache,9
+2026-01-23,January,Fatigue,2
+2026-08-20,August,Fatigue,5
+2026-11-06,November,Itchy Eyes,8
+2026-07-10,July,Runny Nose,8
+2026-07-08,July,Body Ache,4
+2026-12-05,December,Body Ache,9
+2026-09-13,September,Itchy Eyes,5
+2026-08-16,August,Itchy Eyes,10
+2026-08-15,August,Itchy Eyes,5
+2026-09-01,September,Fatigue,4
+2026-08-23,August,Cough,9
+2026-07-03,July,Fever,7
+2026-10-17,October,Fever,4
+2026-06-21,June,Runny Nose,1
+2026-10-10,October,Body Ache,2
+2026-07-15,July,Fatigue,7
+2026-07-16,July,Sneezing,4
+2026-11-11,November,Fever,5
+2026-06-28,June,Cough,4
+2026-12-08,December,Runny Nose,8
+2026-12-06,December,Itchy Eyes,1
+2026-08-28,August,Body Ache,7
+2026-09-27,September,Cough,7
+2026-09-14,September,Runny Nose,7
+2026-06-22,June,Sneezing,4
+2026-03-16,March,Sneezing,8
+2026-01-01,January,Body Ache,9
+2026-12-25,December,Fever,10
+2026-09-08,September,Cough,1
+2026-04-23,April,Itchy Eyes,1
+2026-09-17,September,Fever,3
+2026-01-01,January,Body Ache,2
+2026-11-08,November,Fatigue,4
+2026-09-20,September,Fatigue,8
+2026-11-28,November,Body Ache,9
+2026-06-22,June,Fever,8
+2026-11-08,November,Sneezing,10
+2026-01-05,January,Runny Nose,9
+2026-01-21,January,Fever,10
+2026-04-28,April,Runny Nose,9
+2026-09-22,September,Itchy Eyes,2
+2026-02-25,February,Body Ache,4
+2026-02-23,February,Runny Nose,6
+2026-06-26,June,Fatigue,5
+2026-02-07,February,Fever,9
+2026-01-19,January,Fever,8
+2026-12-04,December,Body Ache,2
+2026-05-15,May,Cough,7
+2026-04-28,April,Sneezing,6
+2026-06-21,June,Runny Nose,10
+2026-02-15,February,Itchy Eyes,3
+2026-10-06,October,Fever,3
+2026-10-18,October,Cough,9
+2026-05-15,May,Sneezing,6
+2026-04-22,April,Itchy Eyes,5
+2026-01-10,January,Body Ache,7
+2026-03-03,March,Itchy Eyes,9
+2026-08-03,August,Cough,1
+2026-10-27,October,Body Ache,6
+2026-07-06,July,Fatigue,6
+2026-08-17,August,Fatigue,5
+2026-04-03,April,Cough,3
+2026-09-17,September,Runny Nose,8
+2026-07-04,July,Itchy Eyes,10
+2026-07-20,July,Sneezing,9
+2026-07-19,July,Cough,7
+2026-09-22,September,Runny Nose,8
+2026-06-20,June,Runny Nose,10
+2026-06-25,June,Fatigue,8
+2026-05-02,May,Itchy Eyes,5
+2026-12-18,December,Cough,4
+2026-04-18,April,Sneezing,9
+2026-04-25,April,Sneezing,10
+2026-06-11,June,Fatigue,5
+2026-06-09,June,Sneezing,4
+2026-03-10,March,Cough,4
+2026-10-24,October,Runny Nose,6
+2026-11-23,November,Fatigue,10
+2026-06-08,June,Fever,1
+2026-04-05,April,Itchy Eyes,3
+2026-01-03,January,Fatigue,10
+2026-06-18,June,Body Ache,7
+2026-02-23,February,Runny Nose,2
+2026-10-05,October,Sneezing,7
+2026-07-18,July,Fever,5
+2026-10-12,October,Fever,9
+2026-03-18,March,Runny Nose,5
+2026-07-02,July,Itchy Eyes,1
+2026-04-17,April,Fever,10
+2026-11-03,November,Sneezing,1
+2026-08-25,August,Runny Nose,2
+2026-12-09,December,Sneezing,6
+2026-11-01,November,Itchy Eyes,9
