@@ -25,7 +25,7 @@ export default function Sidebar() {
                     </div>
                     <div>
                         <span className="text-base font-black tracking-tight block leading-none" style={{ color: '#1a1a2e' }}>
-                            ClinicPulse
+                            Medikly
                         </span>
                         <span className="text-[10px] font-bold uppercase tracking-widest mt-0.5 block" style={{ color: '#2E7D32' }}>
                             Data Science Hub

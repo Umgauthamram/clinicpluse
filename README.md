@@ -1,7 +1,7 @@
-# ClinicPulse: Health Analytics Dashboard
+# Medikly: Health Analytics Dashboard
 
 ## 📋 Project Overview
-**Problem Statement**: Small community clinics lack tools to understand disease patterns such as seasonal outbreaks or common symptoms. ClinicPulse provides a data-driven platform to identify trends, correlate symptoms with diseases, and provide automated treatment protocols to support early diagnosis and treatment planning.
+**Problem Statement**: Small community clinics lack tools to understand disease patterns such as seasonal outbreaks or common symptoms. Medikly provides a data-driven platform to identify trends, correlate symptoms with diseases, and provide automated treatment protocols to support early diagnosis and treatment planning.
 
 This project analyzes clinical data to identify seasonal trends (e.g., Flu season vs. Allergy peaks) and converts raw data into actionable medical insights.
 
@@ -29,7 +29,7 @@ The platform automatically detects:
 ---
 
 ## 📤 Live Data Integration
-ClinicPulse features a robust **Data Upload System** that allows medical staff to update the platform with new findings:
+Medikly features a robust **Data Upload System** that allows medical staff to update the platform with new findings:
 - **Automatic Merging**: Uploaded JSON files are automatically saved to the system database.
 - **Security**: Includes a multi-step confirmation process with data preview to ensure accuracy before merging.
 - **Real-time Updates**: Once confirmed, all dashboard metrics, AI insights, and reports update instantly without manual processing.

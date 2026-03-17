@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "ClinicPulse — Health Analytics Dashboard",
+  title: "Medikly — Health Analytics Dashboard",
   description: "Small community clinic analytics platform for seasonal outbreak detection, symptom analysis, and treatment planning.",
 };
 

@@ -55,7 +55,7 @@ const SymptomHeatmap = () => {
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
                 <div>
                     <h2 className="text-2xl font-bold text-slate-800 tracking-tight">Symptom Intensity Matrix</h2>
-                    <p className="text-slate-500 text-sm mt-1">Symptom frequency mapping by month for ClinicPulse Analytics.</p>
+                    <p className="text-slate-500 text-sm mt-1">Symptom frequency mapping by month for Medikly Analytics.</p>
                 </div>
                 <div className="flex items-center gap-2 p-3 bg-emerald-50/80 rounded-xl border border-emerald-100/50">
                     <span className="text-xs font-semibold text-emerald-700 uppercase tracking-widest">Intensity</span>
@@ -130,7 +130,7 @@ const SymptomHeatmap = () => {
                     <span>Real-time Data Active</span>
                 </div>
                 <div className="tracking-wide">
-                    © 2024 ClinicPulse Analytics Engine
+                    © 2024 Medikly Analytics Engine
                 </div>
             </div>
         </div>
