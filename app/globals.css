@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --primary: #2E7D32;
-  --primary-light: #A5D6A7;
-  --primary-dark: #1B5E20;
-  --accent: #66BB6A;
-  --bg: #F1F8F4;
-  --bg-card: #FFFFFF;
-  --text-primary: #1a1a2e;
-  --text-secondary: #6b7c8a;
-  --danger: #E53935;
-  --warning: #FFA726;
-  --info: #42A5F5;
+  --primary: #059669;
+  --primary-light: #6ee7b7;
+  --primary-dark: #064e3b;
+  --accent: #14b8a6;
+  --bg: #ecfdf5;
+  --bg-card: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --info: #3b82f6;
 }
 
 * {
@@ -19,7 +19,8 @@
 }
 
 body {
-  background: var(--bg);
+  background: linear-gradient(135deg, #f8fafc 0%, #d1fae5 100%);
+  background-attachment: fixed;
   color: var(--text-primary);
   font-family: var(--font-geist-sans), 'Inter', sans-serif;
 }
@@ -97,11 +98,11 @@ body {
 }
 
 .animate-fade-in {
-  animation: fadeInUp 0.7s ease-out forwards;
+  animation: fadeInUp 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .animate-slide-left {
-  animation: slideInLeft 0.5s ease-out forwards;
+  animation: slideInLeft 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .animate-pulse-glow {

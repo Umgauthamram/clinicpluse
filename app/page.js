@@ -14,8 +14,8 @@ export default function DashboardPage() {
   }, []);
 
   if (loading || !data) return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="w-8 h-8 rounded-full border-4 border-t-transparent animate-spin" style={{ borderColor: '#A5D6A7', borderTopColor: 'transparent' }} />
+    <div className="flex items-center justify-center h-screen w-full">
+      <div className="w-10 h-10 rounded-full border-4 border-emerald-200 border-t-emerald-600 animate-spin" />
     </div>
   );
 
@@ -95,39 +95,39 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black tracking-tight" style={{ color: '#1a1a2e' }}>
-            Dashboard <span style={{ color: '#2E7D32' }}>Overview</span>
+          <h1 className="text-4xl font-black tracking-tight text-slate-800">
+            Dashboard <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-500">Overview</span>
           </h1>
-          <p className="text-sm mt-1" style={{ color: '#6b7c8a' }}>Quick overview for doctors — Total cases, trends, and alerts</p>
+          <p className="text-sm mt-2 text-slate-500 font-medium">Quick overview for doctors — Total cases, trends, and alerts</p>
         </div>
-        <div className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold" style={{ background: '#E8F5E9', color: '#2E7D32' }}>
-          <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#2E7D32' }} />
+        <div className="flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-700 backdrop-blur-sm border border-emerald-500/20 shadow-sm">
+          <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-pulse" />
           Live Monitoring Active
         </div>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 stagger">
-        <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100 opacity-0 animate-fade-in">
-          <p className="text-xs font-black uppercase tracking-widest" style={{ color: '#6b7c8a' }}>Total Cases</p>
-          <p className="text-4xl font-black mt-2 animate-count" style={{ color: '#2E7D32' }}>{totalCases}</p>
-          <p className="text-xs mt-2" style={{ color: '#6b7c8a' }}>Across Jan-Mar 2026</p>
+        <div className="bg-white/60 backdrop-blur-xl rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 opacity-0 animate-fade-in hover:-translate-y-1 hover:shadow-[0_20px_40px_rgb(16,185,129,0.1)] transition-all duration-300">
+          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Total Cases</p>
+          <p className="text-4xl font-black mt-3 animate-count bg-clip-text text-transparent bg-gradient-to-br from-emerald-600 to-teal-600">{totalCases}</p>
+          <p className="text-xs mt-3 text-slate-500 font-medium">Across Jan-Mar 2026</p>
         </div>
-        <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100 opacity-0 animate-fade-in">
-          <p className="text-xs font-black uppercase tracking-widest" style={{ color: '#6b7c8a' }}>Top Symptom</p>
-          <p className="text-2xl font-black mt-2" style={{ color: '#1a1a2e' }}>{topSymptom.name}</p>
-          <p className="text-xs mt-2" style={{ color: '#6b7c8a' }}>{topSymptom.total} reported cases</p>
+        <div className="bg-white/60 backdrop-blur-xl rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 opacity-0 animate-fade-in hover:-translate-y-1 hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-300">
+          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Top Symptom</p>
+          <p className="text-2xl font-black mt-3 text-slate-700">{topSymptom.name}</p>
+          <p className="text-xs mt-3 text-slate-500 font-medium">{topSymptom.total} reported cases</p>
         </div>
-        <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100 opacity-0 animate-fade-in">
-          <p className="text-xs font-black uppercase tracking-widest" style={{ color: '#6b7c8a' }}>Peak Month</p>
-          <p className="text-2xl font-black mt-2" style={{ color: '#1a1a2e' }}>{monthlyTotals.sort((a, b) => b.total - a.total)[0].fullMonth}</p>
-          <p className="text-xs mt-2" style={{ color: '#6b7c8a' }}>{monthlyTotals.sort((a, b) => b.total - a.total)[0].total} cases logged</p>
+        <div className="bg-white/60 backdrop-blur-xl rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 opacity-0 animate-fade-in hover:-translate-y-1 hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-300">
+          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Peak Month</p>
+          <p className="text-2xl font-black mt-3 text-slate-700">{monthlyTotals.sort((a, b) => b.total - a.total)[0].fullMonth}</p>
+          <p className="text-xs mt-3 text-slate-500 font-medium">{monthlyTotals.sort((a, b) => b.total - a.total)[0].total} cases logged</p>
         </div>
-        <div className="rounded-3xl p-6 shadow-lg text-white relative overflow-hidden" style={{ background: '#2E7D32' }}>
-          <div className="absolute -right-4 -bottom-4 w-24 h-24 rounded-full opacity-20" style={{ background: '#A5D6A7' }} />
-          <p className="text-xs font-black uppercase tracking-widest" style={{ color: '#A5D6A7' }}>Symptoms Tracked</p>
-          <p className="text-4xl font-black mt-2">{symptoms.length}</p>
-          <p className="text-xs mt-2 text-white/70">Active monitoring</p>
+        <div className="rounded-3xl p-6 shadow-[0_10px_40px_rgba(5,150,105,0.4)] text-white relative overflow-hidden bg-gradient-to-br from-emerald-500 to-teal-700 hover:-translate-y-1 transition-all duration-300">
+          <div className="absolute -right-4 -top-8 w-32 h-32 rounded-full bg-white/10 blur-xl mix-blend-overlay" />
+          <p className="text-[10px] font-black uppercase tracking-widest text-emerald-100/80">Symptoms Tracked</p>
+          <p className="text-4xl font-black mt-3">{symptoms.length}</p>
+          <p className="text-xs mt-3 text-white/80 font-medium">Active monitoring</p>
         </div>
       </div>
 
@@ -153,53 +153,60 @@ export default function DashboardPage() {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Bar Chart — Cases per Month */}
-        <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
-          <h3 className="text-sm font-black uppercase tracking-wider mb-1" style={{ color: '#1a1a2e' }}>Total Cases Per Month</h3>
-          <p className="text-xs" style={{ color: '#6b7c8a' }}>Aggregated symptom volume by month</p>
+        <div className="bg-white/60 backdrop-blur-xl rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 relative group">
+          <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent rounded-3xl pointer-events-none" />
+          <h3 className="text-[10px] font-black uppercase tracking-widest mb-1 text-slate-500">Total Cases Per Month</h3>
+          <p className="text-xs text-slate-400 font-medium mb-6">Aggregated symptom volume</p>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={monthlyTotals.sort((a, b) => months.indexOf(a.fullMonth) - months.indexOf(b.fullMonth))}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-              <XAxis dataKey="month" tick={{ fontSize: 12, fontWeight: 700 }} />
-              <YAxis tick={{ fontSize: 12 }} />
-              <Tooltip contentStyle={{ borderRadius: 16, border: 'none', boxShadow: '0 8px 32px rgba(0,0,0,0.08)' }} />
-              <Bar dataKey="total" fill="#2E7D32" radius={[12, 12, 0, 0]} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+              <XAxis dataKey="month" tick={{ fontSize: 12, fontWeight: 600, fill: '#64748b' }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} />
+              <Tooltip cursor={{ fill: 'rgba(203,213,225,0.2)' }} contentStyle={{ borderRadius: 16, border: '1px solid rgba(255,255,255,0.8)', background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(10px)', boxShadow: '0 10px 40px rgba(0,0,0,0.1)' }} />
+              <Bar dataKey="total" fill="url(#barGradient)" radius={[6, 6, 0, 0]} />
+              <defs>
+                <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#059669" />
+                  <stop offset="100%" stopColor="#14b8a6" />
+                </linearGradient>
+              </defs>
             </BarChart>
           </ResponsiveContainer>
         </div>
 
         {/* Line Chart — Symptom Trends */}
-        <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
-          <h3 className="text-sm font-black uppercase tracking-wider mb-1" style={{ color: '#1a1a2e' }}>Symptom Trends Over Time</h3>
-          <p className="text-xs mb-6" style={{ color: '#6b7c8a' }}>Monthly progression of each symptom</p>
+        <div className="bg-white/60 backdrop-blur-xl rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 relative group">
+          <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent rounded-3xl pointer-events-none" />
+          <h3 className="text-[10px] font-black uppercase tracking-widest mb-1 text-slate-500">Symptom Trends</h3>
+          <p className="text-xs mb-6 text-slate-400 font-medium">Progression of each symptom</p>
           <ResponsiveContainer width="100%" height={280}>
             <LineChart data={lineData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-              <XAxis dataKey="month" tick={{ fontSize: 12, fontWeight: 700 }} />
-              <YAxis tick={{ fontSize: 12 }} />
-              <Tooltip contentStyle={{ borderRadius: 16, border: 'none', boxShadow: '0 8px 32px rgba(0,0,0,0.08)' }} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+              <XAxis dataKey="month" tick={{ fontSize: 12, fontWeight: 600, fill: '#64748b' }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} />
+              <Tooltip contentStyle={{ borderRadius: 16, border: '1px solid rgba(255,255,255,0.8)', background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(10px)', boxShadow: '0 10px 40px rgba(0,0,0,0.1)' }} />
               {symptoms.map((s, i) => (
-                <Line key={s} type="monotone" dataKey={s} stroke={colors[i % colors.length]} strokeWidth={3} dot={{ r: 5 }} />
+                <Line key={s} type="monotone" dataKey={s} stroke={colors[i % colors.length]} strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
               ))}
             </LineChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      {/* Trend Summary */}
-      <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
-        <h3 className="text-sm font-black uppercase tracking-wider mb-6" style={{ color: '#1a1a2e' }}>Trend Summary ({months[0]} → {months[months.length - 1]})</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 stagger">
+      <div className="bg-white/60 backdrop-blur-xl rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/60 relative">
+        <h3 className="text-[10px] font-black uppercase tracking-widest mb-6 text-slate-500">Trend Summary ({months[0]} → {months[months.length - 1]})</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 stagger relative z-10">
           {symptoms.map((s, i) => {
             const t = trends.find(tr => tr.symptom === s);
             const startVal = processedData[s][months[0]] || 0;
             const endVal = processedData[s][months[months.length - 1]] || 0;
             const dir = t ? t.direction : '→';
-            const color = dir === '↑' ? '#E53935' : dir === '↓' ? '#2E7D32' : '#9e9e9e';
+            const color = dir === '↑' ? '#ef4444' : dir === '↓' ? '#10b981' : '#94a3b8';
             return (
-              <div key={s} className="text-center p-4 rounded-2xl border border-gray-100 opacity-0 animate-fade-in hover:shadow-md transition-shadow">
-                <p className="text-xs font-bold mb-2" style={{ color: '#6b7c8a' }}>{s}</p>
-                <p className="text-2xl font-black" style={{ color }}>{dir}</p>
-                <p className="text-xs font-black mt-2" style={{ color: '#1a1a2e' }}>{startVal} → {endVal}</p>
+              <div key={s} className="text-center p-5 rounded-2xl bg-white/50 border border-white/80 opacity-0 animate-fade-in hover:shadow-[0_10px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
+                <p className="text-xs font-bold mb-2 text-slate-500 truncate" title={s}>{s}</p>
+                <p className="text-3xl font-black" style={{ color }}>{dir}</p>
+                <p className="text-xs font-bold mt-2 text-slate-700">{startVal} → {endVal}</p>
               </div>
             );
           })}

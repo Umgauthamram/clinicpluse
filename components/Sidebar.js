@@ -16,18 +16,18 @@ export default function Sidebar() {
     const pathname = usePathname();
 
     return (
-        <aside className="hidden lg:flex w-72 bg-white border-r border-gray-200 flex-col sticky top-0 h-screen z-40 shadow-sm">
+        <aside className="hidden lg:flex w-72 bg-white/40 backdrop-blur-2xl border-r border-white/60 flex-col sticky top-0 h-screen z-40 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
             {/* Branding */}
-            <div className="p-6 border-b border-gray-100">
+            <div className="p-6 border-b border-white/40">
                 <Link href="/" className="flex items-center gap-3 group">
-                    <div className="h-11 w-11 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform" style={{ background: '#2E7D32' }}>
+                    <div className="h-11 w-11 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform bg-gradient-to-br from-emerald-500 to-teal-700">
                         <span className="text-white font-black text-2xl">+</span>
                     </div>
                     <div>
-                        <span className="text-base font-black tracking-tight block leading-none" style={{ color: '#1a1a2e' }}>
+                        <span className="text-base font-black tracking-tight block leading-none text-slate-800">
                             Medikly
                         </span>
-                        <span className="text-[10px] font-bold uppercase tracking-widest mt-0.5 block" style={{ color: '#2E7D32' }}>
+                        <span className="text-[10px] font-bold uppercase tracking-widest mt-0.5 block text-emerald-600">
                             Data Science Hub
                         </span>
                     </div>
@@ -43,18 +43,17 @@ export default function Sidebar() {
                         <Link
                             key={item.href}
                             href={item.href}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-200 group ${isActive
-                                ? 'shadow-md'
-                                : 'hover:bg-gray-50'
+                            className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 group ${isActive
+                                ? 'bg-gradient-to-r from-emerald-500/10 to-transparent shadow-sm border-l-4 border-emerald-500'
+                                : 'hover:bg-white/50 border-l-4 border-transparent'
                                 }`}
-                            style={isActive ? { background: '#E8F5E9', color: '#2E7D32' } : {}}
                         >
                             <div className="flex flex-col">
-                                <span className={`text-xs font-bold ${isActive ? '' : 'text-gray-700'}`}>{item.label}</span>
-                                <span className="text-[10px] text-gray-400">{item.desc}</span>
+                                <span className={`text-xs font-bold ${isActive ? 'text-emerald-700' : 'text-slate-600'}`}>{item.label}</span>
+                                <span className="text-[10px] text-slate-400 font-medium">{item.desc}</span>
                             </div>
                             {isActive && (
-                                <div className="ml-auto w-2 h-2 rounded-full animate-pulse-glow" style={{ background: '#2E7D32' }} />
+                                <div className="ml-auto w-2 h-2 rounded-full animate-pulse blur-[1px] bg-emerald-500" />
                             )}
                         </Link>
                     );
