@@ -6,7 +6,6 @@ export default function AnalysisPage() {
     const [data, setData] = useState(null);
     const [selected, setSelected] = useState('Fever');
     const [loading, setLoading] = useState(true);
-
     const [knowledge, setKnowledge] = useState(null);
 
     useEffect(() => {
@@ -16,12 +15,19 @@ export default function AnalysisPage() {
         ]).then(([d, k]) => {
             setData(d);
             setKnowledge(k);
-            // Default select the most frequent symptom
-            const symptoms = Object.keys(d);
-            if (symptoms.length > 0) setSelected(symptoms[0]);
+            const syms = Object.keys(d);
+            if (syms.length > 0) setSelected(syms[0]);
             setLoading(false);
         }).catch(() => setLoading(false));
     }, []);
+
+    // Hooks at the top
+    const associatedDiseases = useMemo(() => {
+        if (!knowledge || !selected || !knowledge.diseases) return [];
+        return knowledge.diseases.filter(d => 
+            d.symptoms.some(s => s.toLowerCase() === selected.toLowerCase())
+        ).slice(0, 2); 
+    }, [knowledge, selected]);
 
     if (loading || !data) return (
         <div className="flex items-center justify-center h-screen">
@@ -81,13 +87,6 @@ export default function AnalysisPage() {
         Average: avgPerMonth[i]
     }));
 
-    // Find medical context for the selected symptom
-    const associatedDiseases = useMemo(() => {
-        if (!knowledge || !selected) return [];
-        return knowledge.diseases.filter(d => 
-            d.symptoms.some(s => s.toLowerCase() === selected.toLowerCase())
-        ).slice(0, 2); // Show top 2 associated conditions
-    }, [knowledge, selected]);
 
     return (
         <div className="p-6 lg:p-10 space-y-8 max-w-[1400px] mx-auto">

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState, useMemo } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ScatterChart, Scatter, ZAxis } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
 
 export default function TrendsPage() {
     const [data, setData] = useState(null);
@@ -13,37 +13,69 @@ export default function TrendsPage() {
             .catch(() => setLoading(false));
     }, []);
 
-    if (loading || !data) return (
+    // 1. Process Data at the top
+    const processedData = useMemo(() => {
+        if (!data) return null;
+        let processed = data;
+        if (Array.isArray(data)) {
+            processed = {};
+            data.forEach(record => {
+                const s = record.Symptom;
+                const m = record.Month;
+                if (s && m) {
+                    if (!processed[s]) processed[s] = {};
+                    processed[s][m] = (processed[s][m] || 0) + 1;
+                }
+            });
+        }
+        return processed;
+    }, [data]);
+
+    const symptoms = useMemo(() => processedData ? Object.keys(processedData) : [], [processedData]);
+    const monthsOrder = useMemo(() => ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], []);
+    const months = useMemo(() => {
+        if (!processedData) return [];
+        return monthsOrder.filter(m =>
+            symptoms.some(s => processedData[s][m] !== undefined)
+        );
+    }, [processedData, symptoms, monthsOrder]);
+
+    const correlationPairs = useMemo(() => {
+        if (!symptoms || symptoms.length < 2) return [];
+        const top4 = symptoms.slice(0, 4);
+        return [
+            { x: top4[0], y: top4[1], label: `${top4[0]} vs ${top4[1]}` },
+            { x: top4[2], y: top4[3], label: `${top4[2]} vs ${top4[3]}` }
+        ].filter(p => p.x && p.y);
+    }, [symptoms]);
+
+    const patterns = useMemo(() => {
+        if (!processedData || !symptoms || months.length === 0) return [];
+        const results = [];
+        months.forEach(m => {
+            const monthlyTotal = symptoms.reduce((s, sym) => s + (processedData[sym]?.[m] || 0), 0);
+            if (monthlyTotal > 100) {
+                results.push({ type: 'Critical Volume', detail: `Extreme patient load in ${m} (${monthlyTotal} cases total).`, severity: 'high' });
+            }
+            const fever = (processedData['fever']?.[m] || 0) + (processedData['Fever']?.[m] || 0);
+            const inflammation = (processedData['inflammation']?.[m] || 0) + (processedData['pain']?.[m] || 0);
+            if (fever > 15) {
+                results.push({ type: 'Pyrexia Cluster', detail: `Significant fever spike in ${m}. Potential viral vector.`, severity: 'high' });
+            }
+            if (inflammation > 10) {
+                results.push({ type: 'Inflammatory Wave', detail: `Rising tissue sensitivity or swelling reported in ${m}.`, severity: 'medium' });
+            }
+        });
+        return results;
+    }, [processedData, symptoms, months]);
+
+    if (loading || !processedData) return (
         <div className="flex items-center justify-center h-screen">
             <div className="w-8 h-8 rounded-full border-4 border-t-transparent animate-spin" style={{ borderColor: '#A5D6A7', borderTopColor: 'transparent' }} />
         </div>
     );
 
-    // Normalize data: Handle both aggregated object format and raw record array format
-    let processedData = data;
-    if (Array.isArray(data)) {
-        processedData = {};
-        data.forEach(record => {
-            const s = record.Symptom;
-            const m = record.Month;
-            if (s && m) {
-                if (!processedData[s]) processedData[s] = {};
-                processedData[s][m] = (processedData[s][m] || 0) + 1;
-            }
-        });
-    }
-
-    const symptoms = Object.keys(processedData);
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].filter(m =>
-        symptoms.some(s => processedData[s][m] !== undefined)
-    );
     const colors = ['#2E7D32', '#66BB6A', '#A5D6A7', '#42A5F5', '#FFA726', '#E53935', '#AB47BC'];
-
-    // Heatmap data
-    const heatmapData = symptoms.map(s => ({
-        symptom: s,
-        ...Object.fromEntries(months.map(m => [m, processedData[s][m] || 0]))
-    }));
     const maxVal = Math.max(...symptoms.flatMap(s => months.map(m => processedData[s][m] || 0)));
 
     const getHeatColor = (val) => {
@@ -56,7 +88,11 @@ export default function TrendsPage() {
         return '#C8E6C9';
     };
 
-    // Seasonal spike detection
+    const heatmapData = symptoms.map(s => ({
+        symptom: s,
+        ...Object.fromEntries(months.map(m => [m, processedData[s][m] || 0]))
+    }));
+
     const spikes = [];
     symptoms.forEach(s => {
         months.forEach(m => {
@@ -68,55 +104,12 @@ export default function TrendsPage() {
         });
     });
 
-    // Dynamic Correlation Detection
-    const correlationPairs = useMemo(() => {
-        if (!symptoms || symptoms.length < 2) return [];
-        // Pair the top 4 symptoms for comparison
-        const top4 = symptoms.slice(0, 4);
-        return [
-            { x: top4[0], y: top4[1], label: `${top4[0]} vs ${top4[1]}` },
-            { x: top4[2], y: top4[3], label: `${top4[2]} vs ${top4[3]}` }
-        ].filter(p => p.x && p.y);
-    }, [symptoms]);
-
-    // Pattern detection logic
-    const patterns = useMemo(() => {
-        const results = [];
-        months.forEach(m => {
-            // High Volume Alert
-            const monthlyTotal = symptoms.reduce((s, sym) => s + (processedData[sym]?.[m] || 0), 0);
-            if (monthlyTotal > 100) {
-                results.push({ type: 'Critical Volume', detail: `Extreme patient load in ${m} (${monthlyTotal} cases total).`, severity: 'high' });
-            }
-
-            // Specific clusters
-            const fever = (processedData['fever']?.[m] || 0) + (processedData['Fever']?.[m] || 0);
-            const inflammation = (processedData['inflammation']?.[m] || 0) + (processedData['pain']?.[m] || 0);
-
-            if (fever > 15) {
-                results.push({ type: 'Pyrexia Cluster', detail: `Significant fever spike in ${m}. Potential viral vector.`, severity: 'high' });
-            }
-            if (inflammation > 10) {
-                results.push({ type: 'Inflammatory Wave', detail: `Rising tissue sensitivity or swelling reported in ${m}.`, severity: 'medium' });
-            }
-        });
-        return results;
-    }, [processedData, symptoms, months]);
-
-    // Month comparison
     const monthData = months.map(m => ({
         month: m,
         short: m.slice(0, 3),
         total: symptoms.reduce((s, sym) => s + (processedData[sym][m] || 0), 0),
         breakdown: symptoms.map(sym => ({ name: sym, value: processedData[sym][m] || 0 }))
     }));
-
-    // Line data
-    const lineData = months.map(m => {
-        const point = { month: m.slice(0, 3) };
-        symptoms.forEach(s => { point[s] = processedData[s][m] || 0; });
-        return point;
-    });
 
     return (
         <div className="p-6 lg:p-10 space-y-10 max-w-[1400px] mx-auto">
@@ -127,7 +120,6 @@ export default function TrendsPage() {
                 <p className="text-sm mt-1" style={{ color: '#6b7c8a' }}>Identify outbreaks, seasonal spikes, and symptom correlations</p>
             </div>
 
-            {/* Heatmap */}
             <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100 animate-fade-in">
                 <h3 className="text-sm font-black uppercase tracking-wider mb-1" style={{ color: '#1a1a2e' }}>Symptom Intensity Heatmap</h3>
                 <p className="text-xs mb-6" style={{ color: '#6b7c8a' }}>Color intensity = number of cases. Darker = more cases.</p>
@@ -164,7 +156,6 @@ export default function TrendsPage() {
                 </div>
             </div>
 
-            {/* Seasonal Spikes */}
             {spikes.length > 0 && (
                 <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
                     <h3 className="text-sm font-black uppercase tracking-wider mb-6" style={{ color: '#1a1a2e' }}>Seasonal Spike Detection</h3>
@@ -180,7 +171,6 @@ export default function TrendsPage() {
                 </div>
             )}
 
-            {/* Symptom Correlation Comparison */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {correlationPairs.map((pair, idx) => (
                     <div key={idx} className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
@@ -204,9 +194,6 @@ export default function TrendsPage() {
                 ))}
             </div>
 
-
-
-            {/* Month Comparison Tool */}
             <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
                 <h3 className="text-sm font-black uppercase tracking-wider mb-6" style={{ color: '#1a1a2e' }}>Month Comparison</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
