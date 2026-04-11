@@ -6,28 +6,99 @@ import { LineChart as MuiLineChart } from '@mui/x-charts/LineChart';
 export default function DashboardPage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-
   const [knowledge, setKnowledge] = useState(null);
+  const [selectedSymptoms, setSelectedSymptoms] = useState([]);
 
   useEffect(() => {
-    fetch('/clinic_insight.json')
-      .then(res => res.json())
-      .then(d => { setData(d); })
-      .catch(() => setLoading(false));
-
-    fetch('/medical_knowledge.json')
-      .then(res => res.json())
-      .then(k => { setKnowledge(k); setLoading(false); })
-      .catch(() => setLoading(false));
+    Promise.all([
+      fetch('/clinic_insight.json').then(res => res.json()),
+      fetch('/medical_knowledge.json').then(res => res.json())
+    ]).then(([d, k]) => {
+      setData(d);
+      setKnowledge(k);
+      setLoading(false);
+    }).catch(() => setLoading(false));
   }, []);
 
-  if (loading || !data) return (
+  const processedData = useMemo(() => {
+    if (!data) return null;
+    let processed = data;
+    if (Array.isArray(data)) {
+      processed = {};
+      data.forEach(record => {
+        const s = record.Symptom;
+        const m = record.Month;
+        if (s && m) {
+          if (!processed[s]) processed[s] = {};
+          processed[s][m] = (processed[s][m] || 0) + 1;
+        }
+      });
+    }
+    return processed;
+  }, [data]);
+
+  const symptoms = useMemo(() => processedData ? Object.keys(processedData) : [], [processedData]);
+  const monthsOrder = useMemo(() => ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], []);
+  const months = useMemo(() => {
+    if (!processedData) return [];
+    return monthsOrder.filter(m =>
+      symptoms.some(s => processedData[s][m] !== undefined)
+    );
+  }, [processedData, symptoms, monthsOrder]);
+
+  useEffect(() => {
+    if (symptoms.length > 0 && selectedSymptoms.length === 0) {
+      setSelectedSymptoms(symptoms.slice(0, 3));
+    }
+  }, [symptoms]);
+
+  const nextMonthPrediction = useMemo(() => {
+    if (!processedData || !knowledge || months.length === 0) {
+      return { disease: "Calculating...", symptom: "Analyzing", probability: "...", advice: "Scanning historical data..." };
+    }
+    
+    const lastMonth = months[months.length - 1];
+    const prevMonth = months[months.length - 2] || lastMonth;
+    
+    const projectedSymptoms = {};
+    symptoms.forEach(s => {
+      const current = processedData[s][lastMonth] || 0;
+      const previous = processedData[s][prevMonth] || 0;
+      const trend = current - previous;
+      projectedSymptoms[s] = Math.max(0, Math.round(current + (trend * 1.5)));
+    });
+
+    let bestMatch = { disease: "Undetermined", score: 0, symptom: "Mixed", advice: "Maintain general hygiene." };
+
+    knowledge.diseases.forEach(d => {
+      const matchScore = d.symptoms.reduce((score, s) => {
+        return score + (projectedSymptoms[s] || 0) + (projectedSymptoms[s.toLowerCase()] || 0);
+      }, 0);
+
+      if (matchScore > bestMatch.score) {
+        bestMatch = {
+          disease: d.name,
+          score: matchScore,
+          symptom: d.symptoms[0],
+          advice: `Likely ${d.name} surge. Recommended: ${d.curing.split(',')[0]}.`
+        };
+      }
+    });
+
+    return {
+      disease: bestMatch.disease,
+      symptom: bestMatch.symptom,
+      probability: bestMatch.score > 30 ? "Critical" : "Moderate",
+      advice: bestMatch.advice
+    };
+  }, [processedData, months, symptoms, knowledge]);
+
+  if (loading || !processedData) return (
     <div className="flex items-center justify-center h-screen">
       <div className="w-8 h-8 rounded-full border-4 border-t-transparent animate-spin" style={{ borderColor: '#A5D6A7', borderTopColor: 'transparent' }} />
     </div>
   );
 
-  // Total cases per month
   const monthlyTotals = months.map(m => ({
     month: m.slice(0, 3),
     fullMonth: m,
@@ -35,110 +106,98 @@ export default function DashboardPage() {
   }));
 
   const totalCases = monthlyTotals.reduce((s, m) => s + m.total, 0);
-
-  const symptomTotals = symptoms.map(s => ({
+  const topSymptomName = symptoms.map(s => ({
     name: s,
     total: months.reduce((sum, m) => sum + (processedData[s][m] || 0), 0)
-  })).sort((a, b) => b.total - a.total);
-
-  const topSymptom = symptomTotals[0] || { name: '...', total: 0 };
+  })).sort((a, b) => b.total - a.total)[0]?.name || "...";
 
   const colors = ['#2E7D32', '#66BB6A', '#A5D6A7', '#42A5F5', '#FFA726', '#E53935', '#AB47BC'];
 
   return (
     <div className="p-6 lg:p-10 space-y-8 max-w-[1400px] mx-auto">
-      {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-black tracking-tight" style={{ color: '#1a1a2e' }}>
-            Dashboard <span style={{ color: '#2E7D32' }}>Overview</span>
+            Health <span style={{ color: '#2E7D32' }}>Intelligence</span> Dashboard
           </h1>
-          <p className="text-sm mt-1" style={{ color: '#6b7c8a' }}>Quick overview for doctors — Total cases, trends, and alerts</p>
+          <p className="text-sm mt-1" style={{ color: '#6b7c8a' }}>Advanced clinical monitoring and predictive analytics</p>
         </div>
         <div className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold" style={{ background: '#E8F5E9', color: '#2E7D32' }}>
           <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#2E7D32' }} />
-          Live Monitoring Active
+          AI Engine Active
         </div>
       </div>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 stagger">
-        <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100 opacity-0 animate-fade-in">
-          <p className="text-xs font-black uppercase tracking-widest" style={{ color: '#6b7c8a' }}>Total Cases</p>
-          <p className="text-4xl font-black mt-2 animate-count" style={{ color: '#2E7D32' }}>{totalCases}</p>
-          <p className="text-xs mt-2" style={{ color: '#6b7c8a' }}>Across Jan-Mar 2026</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100">
+          <p className="text-xs font-black uppercase tracking-widest text-slate-400">Total Cases</p>
+          <p className="text-4xl font-black mt-2 text-emerald-600">{totalCases}</p>
+          <p className="text-xs mt-2 text-slate-400">Past {months.length} Months</p>
         </div>
-        <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100 opacity-0 animate-fade-in">
-          <p className="text-xs font-black uppercase tracking-widest" style={{ color: '#6b7c8a' }}>Top Symptom</p>
-          <p className="text-2xl font-black mt-2" style={{ color: '#1a1a2e' }}>{topSymptom.name}</p>
-          <p className="text-xs mt-2" style={{ color: '#6b7c8a' }}>{topSymptom.total} reported cases</p>
+        <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100">
+          <p className="text-xs font-black uppercase tracking-widest text-slate-400">Dominant Symptom</p>
+          <p className="text-2xl font-black mt-2 text-slate-800">{topSymptomName}</p>
+          <p className="text-xs mt-2 text-slate-400">Primary complaint</p>
         </div>
-        <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100 opacity-0 animate-fade-in">
-          <p className="text-xs font-black uppercase tracking-widest" style={{ color: '#6b7c8a' }}>Peak Month</p>
-          <p className="text-2xl font-black mt-2" style={{ color: '#1a1a2e' }}>{monthlyTotals.sort((a, b) => b.total - a.total)[0].fullMonth}</p>
-          <p className="text-xs mt-2" style={{ color: '#6b7c8a' }}>{monthlyTotals.sort((a, b) => b.total - a.total)[0].total} cases logged</p>
+        <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100">
+          <p className="text-xs font-black uppercase tracking-widest text-slate-400">Peak Month</p>
+          <p className="text-2xl font-black mt-2 text-slate-800">{monthlyTotals.sort((a, b) => b.total - a.total)[0]?.fullMonth || "..."}</p>
+          <p className="text-xs mt-2 text-slate-400">Max volume detected</p>
         </div>
-        <div className="rounded-3xl p-6 shadow-lg text-white relative overflow-hidden" style={{ background: '#2E7D32' }}>
-          <div className="absolute -right-4 -bottom-4 w-24 h-24 rounded-full opacity-20" style={{ background: '#A5D6A7' }} />
-          <p className="text-xs font-black uppercase tracking-widest" style={{ color: '#A5D6A7' }}>Symptoms Tracked</p>
-          <p className="text-4xl font-black mt-2">{symptoms.length}</p>
-          <p className="text-xs mt-2 text-white/70">Active monitoring</p>
+        <div className="rounded-3xl p-6 shadow-lg text-white relative overflow-hidden bg-emerald-700">
+          <div className="absolute -right-4 -bottom-4 w-24 h-24 rounded-full opacity-20 bg-emerald-400" />
+          <p className="text-xs font-black uppercase tracking-widest opacity-70">Next Month Forecast</p>
+          <p className="text-2xl font-black mt-2 leading-tight">{nextMonthPrediction.disease}</p>
+          <p className="text-xs mt-2 opacity-80">{nextMonthPrediction.advice}</p>
         </div>
       </div>
 
-      {/* Main Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Bar Chart — Cases per Month */}
         <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
-          <h3 className="text-sm font-black uppercase tracking-wider mb-1" style={{ color: '#1a1a2e' }}>Total Cases Per Month</h3>
-          <p className="text-xs" style={{ color: '#6b7c8a' }}>Aggregated symptom volume by month</p>
-          <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={monthlyTotals.sort((a, b) => months.indexOf(a.fullMonth) - months.indexOf(b.fullMonth))}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-              <XAxis dataKey="month" tick={{ fontSize: 12, fontWeight: 700 }} />
-              <YAxis tick={{ fontSize: 12 }} />
-              <Tooltip contentStyle={{ borderRadius: 16, border: 'none', boxShadow: '0 8px 32px rgba(0,0,0,0.08)' }} />
-              <Bar dataKey="total" fill="#2E7D32" radius={[12, 12, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+          <h3 className="text-sm font-black uppercase tracking-wider mb-6 text-slate-800">Total Patient Volume</h3>
+          <MuiBarChart
+            xAxis={[{ scaleType: 'band', data: monthlyTotals.map(d => d.month) }]}
+            series={[{ data: monthlyTotals.map(d => d.total), color: '#2E7D32', label: 'Cases' }]}
+            height={320}
+            slotProps={{ legend: { hidden: true } }}
+          />
         </div>
 
-        {/* Line Chart — Symptom Trends */}
         <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
-          <h3 className="text-sm font-black uppercase tracking-wider mb-1" style={{ color: '#1a1a2e' }}>Symptom Trends Over Time</h3>
-          <p className="text-xs mb-6" style={{ color: '#6b7c8a' }}>Monthly progression of each symptom</p>
-          <ResponsiveContainer width="100%" height={280}>
-            <LineChart data={lineData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-              <XAxis dataKey="month" tick={{ fontSize: 12, fontWeight: 700 }} />
-              <YAxis tick={{ fontSize: 12 }} />
-              <Tooltip contentStyle={{ borderRadius: 16, border: 'none', boxShadow: '0 8px 32px rgba(0,0,0,0.08)' }} />
-              {symptoms.map((s, i) => (
-                <Line key={s} type="monotone" dataKey={s} stroke={colors[i % colors.length]} strokeWidth={3} dot={{ r: 5 }} />
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <h3 className="text-sm font-black uppercase tracking-wider text-slate-800">Detailed Symptom Trends</h3>
+            <div className="flex flex-wrap gap-2">
+              {symptoms.slice(0, 5).map(s => (
+                <button 
+                  key={s}
+                  onClick={() => {
+                    setSelectedSymptoms(prev => 
+                      prev.includes(s) ? prev.filter(x => x !== s) : [...prev, s]
+                    );
+                  }}
+                  className={`px-3 py-1 rounded-full text-[10px] font-bold transition-all ${
+                    selectedSymptoms.includes(s) 
+                    ? 'bg-emerald-600 text-white shadow-md shadow-emerald-200' 
+                    : 'bg-slate-100 text-slate-400 hover:bg-slate-200'
+                  }`}
+                >
+                  {s}
+                </button>
               ))}
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-
-      {/* Trend Summary */}
-      <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
-        <h3 className="text-sm font-black uppercase tracking-wider mb-6" style={{ color: '#1a1a2e' }}>Trend Summary ({months[0]} → {months[months.length - 1]})</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 stagger">
-          {symptoms.map((s, i) => {
-            const t = trends.find(tr => tr.symptom === s);
-            const startVal = processedData[s][months[0]] || 0;
-            const endVal = processedData[s][months[months.length - 1]] || 0;
-            const dir = t ? t.direction : '→';
-            const color = dir === '↑' ? '#E53935' : dir === '↓' ? '#2E7D32' : '#9e9e9e';
-            return (
-              <div key={s} className="text-center p-4 rounded-2xl border border-gray-100 opacity-0 animate-fade-in hover:shadow-md transition-shadow">
-                <p className="text-xs font-bold mb-2" style={{ color: '#6b7c8a' }}>{s}</p>
-                <p className="text-2xl font-black" style={{ color }}>{dir}</p>
-                <p className="text-xs font-black mt-2" style={{ color: '#1a1a2e' }}>{startVal} → {endVal}</p>
-              </div>
-            );
-          })}
+            </div>
+          </div>
+          <MuiLineChart
+            xAxis={[{ scaleType: 'point', data: months.map(m => m.slice(0, 3)) }]}
+            series={selectedSymptoms.map((s, i) => ({
+              data: months.map(m => processedData[s][m] || 0),
+              label: s,
+              color: colors[i % colors.length],
+              showMark: true,
+              curve: "catmullRom"
+            }))}
+            height={320}
+            slotProps={{ legend: { direction: 'row', position: { vertical: 'bottom', horizontal: 'middle' }, padding: -10 } }}
+          />
         </div>
       </div>
     </div>
