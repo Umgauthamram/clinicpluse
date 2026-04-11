@@ -1,217 +1,260 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 
 export default function InsightsPage() {
     const [data, setData] = useState(null);
     const [knowledge, setKnowledge] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [aiInsights, setAiInsights] = useState([]);
+    const [generating, setGenerating] = useState(false);
 
     useEffect(() => {
         Promise.all([
             fetch('/clinic_insight.json').then(r => r.json()),
             fetch('/medical_knowledge.json').then(r => r.json())
-        ]).then(([d, k]) => { setData(d); setKnowledge(k); setLoading(false); })
-            .catch(() => setLoading(false));
+        ]).then(([d, k]) => { 
+            setData(d); 
+            setKnowledge(k); 
+            setLoading(false);
+            generateRealInsights(d);
+        })
+        .catch(() => setLoading(false));
     }, []);
 
-    if (loading || !data || !knowledge) return (
+    const processedData = useMemo(() => {
+        if (!data) return null;
+        let processed = data;
+        if (Array.isArray(data)) {
+            processed = {};
+            data.forEach(record => {
+                const s = record.Symptom;
+                const m = record.Month;
+                if (s && m) {
+                    if (!processed[s]) processed[s] = {};
+                    processed[s][m] = (processed[s][m] || 0) + 1;
+                }
+            });
+        }
+        return processed;
+    }, [data]);
+
+    const generateRealInsights = async (currentData) => {
+        setGenerating(true);
+        try {
+            // Create a summary for the AI
+            const summary = Object.entries(currentData).slice(0, 5).map(([s, m]) => 
+                `${s}: ${Object.entries(m).map(([month, count]) => `${month}(${count})`).join(', ')}`
+            ).join('; ');
+
+            const res = await fetch('/api/ai-insights', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ dataSummary: summary })
+            });
+            const result = await res.json();
+            setAiInsights(result.insights || []);
+        } catch (error) {
+            console.error("Failed to generate AI insights:", error);
+        } finally {
+            setGenerating(false);
+        }
+    };
+
+    const symptoms = useMemo(() => processedData ? Object.keys(processedData) : [], [processedData]);
+    const monthsOrder = useMemo(() => ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], []);
+    const months = useMemo(() => {
+        if (!processedData) return [];
+        return monthsOrder.filter(m =>
+            symptoms.some(s => processedData[s][m] !== undefined)
+        );
+    }, [processedData, symptoms, monthsOrder]);
+
+    // Advanced Dynamic Diagnosis Engine
+    const diagnoses = useMemo(() => {
+        if (!processedData || !knowledge || months.length === 0) return [];
+        const results = [];
+        
+        // Dynamic matching: Iterate through each month and each disease in the library
+        months.forEach(m => {
+            knowledge.diseases.forEach(disease => {
+                // If a disease is "detected" (at least 2 matching moderate symptoms in that month)
+                // Case-insensitive lookup
+                const matchingSymptoms = disease.symptoms.filter(s => {
+                    const val = processedData[s]?.[m] || 
+                                processedData[s.toLowerCase()]?.[m] || 
+                                processedData[s.charAt(0).toUpperCase() + s.slice(1)]?.[m] || 0;
+                    return val >= 2;
+                });
+                
+                if (matchingSymptoms.length >= 2 || (matchingSymptoms.length >= 1 && disease.symptoms.length === 1)) {
+                    // Calculate confidence based on symptom volume
+                    const totalVolume = matchingSymptoms.reduce((sum, s) => {
+                        const val = processedData[s]?.[m] || 
+                                    processedData[s.toLowerCase()]?.[m] || 
+                                    processedData[s.charAt(0).toUpperCase() + s.slice(1)]?.[m] || 0;
+                        return sum + val;
+                    }, 0);
+                    const confidence = Math.min(98, Math.round((totalVolume / (matchingSymptoms.length * 10)) * 100));
+
+                    if (confidence > 30) {
+                        results.push({
+                            condition: disease.name,
+                            confidence: confidence,
+                            trigger: `${matchingSymptoms.join(' + ')} detected in ${m}`,
+                            severity: disease.severity || 'Medium',
+                            month: m,
+                            treatment: disease
+                        });
+                    }
+                }
+            });
+        });
+        
+        // Sort by confidence and month recital
+        return results.sort((a, b) => b.confidence - a.confidence);
+    }, [processedData, knowledge, months]);
+
+    const [searchTerm, setSearchTerm] = useState('');
+    const filteredDiagnoses = diagnoses.filter(d => 
+        d.condition.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        d.month.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    if (loading || !processedData || !knowledge) return (
         <div className="flex items-center justify-center h-screen">
             <div className="w-8 h-8 rounded-full border-4 border-t-transparent animate-spin" style={{ borderColor: '#A5D6A7', borderTopColor: 'transparent' }} />
         </div>
     );
 
-    // Normalize data: Handle both aggregated object format and raw record array format
-    let processedData = data;
-    if (Array.isArray(data)) {
-        processedData = {};
-        data.forEach(record => {
-            const s = record.Symptom;
-            const m = record.Month;
-            if (s && m) {
-                if (!processedData[s]) processedData[s] = {};
-                processedData[s][m] = (processedData[s][m] || 0) + 1;
-            }
-        });
-    }
-
-    const symptoms = Object.keys(processedData);
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].filter(m =>
-        symptoms.some(s => processedData[s][m] !== undefined)
-    );
-
-    // AI Diagnosis Rules (Iterate through months to find spikes)
-    const diagnoses = [];
-
-    months.forEach(m => {
-        // Rule 1: Fever + Cough → Flu (Winter/Early Spring)
-        const fever = processedData['Fever']?.[m] || 0;
-        const cough = processedData['Cough']?.[m] || 0;
-        if (fever >= 15 && cough >= 10) {
-            diagnoses.push({
-                condition: 'Influenza (Flu)',
-                confidence: Math.min(95, Math.round((fever + cough) / 40 * 100)),
-                trigger: `High Fever (${fever}) + Cough (${cough}) in ${m}`,
-                severity: 'high',
-                month: m,
-                treatment: knowledge.diseases.find(d => d.id === 'influenza'),
-            });
-        }
-
-        // Rule 2: Sneezing + Itchy Eyes → Allergy (Spring/Fall)
-        const sneeze = processedData['Sneezing']?.[m] || 0;
-        const itchy = processedData['Itchy Eyes']?.[m] || 0;
-        if (sneeze >= 20 && itchy >= 20) {
-            diagnoses.push({
-                condition: 'Allergic Rhinitis',
-                confidence: Math.min(98, Math.round((sneeze + itchy) / 60 * 100)),
-                trigger: `Severe Sneezing (${sneeze}) + Itchy Eyes (${itchy}) in ${m}`,
-                severity: 'medium',
-                month: m,
-                treatment: knowledge.diseases.find(d => d.id === 'allergic-rhinitis'),
-            });
-        }
-
-        // Rule 3: Fever + Body Ache → Viral Fever
-        const feverVal = processedData['Fever']?.[m] || 0;
-        const bodyVal = processedData['Body Ache']?.[m] || 0;
-        if (feverVal >= 8 && bodyVal >= 5 && !diagnoses.find(d => d.month === m && d.condition === 'Influenza (Flu)')) {
-            diagnoses.push({
-                condition: 'Viral Fever',
-                confidence: Math.min(85, Math.round((feverVal + bodyVal) / 20 * 100)),
-                trigger: `Fever (${feverVal}) + Body Ache (${bodyVal}) in ${m}`,
-                severity: 'medium',
-                month: m,
-                treatment: knowledge.diseases.find(d => d.id === 'viral-fever'),
-            });
-        }
-    });
-
-    // Rule 4: Cough + Runny Nose → Common Cold
-    const coughTotal = months.reduce((s, m) => s + (processedData['Cough']?.[m] || 0), 0);
-    const runnyTotal = months.reduce((s, m) => s + (processedData['Runny Nose']?.[m] || 0), 0);
-    if (coughTotal >= 5 && runnyTotal >= 2) {
-        diagnoses.push({
-            condition: 'Common Cold',
-            confidence: Math.min(80, Math.round((coughTotal + runnyTotal) / 12 * 100)),
-            trigger: `Cough (${coughTotal}) + Runny Nose (${runnyTotal}) across quarter`,
-            severity: 'low',
-            month: 'All Months',
-            treatment: knowledge.diseases.find(d => d.id === 'common-cold'),
-        });
-    }
-
-    const aiInsights = [
-        "Annual data reveals clear seasonality: Fever peaks in Winter (Dec-Jan), while Allergies dominate Spring (March-May).",
-        "Respiratory infections show a strongly cyclical pattern, returning in late Autumn (September).",
-        "The highest single-month volume was recorded in April for Sneezing/Allergies.",
-        "Treatment stock should be rotated: Stock Antivirals in Nov-Jan and Antihistamines in Feb-May.",
-    ];
-
-    // Prediction for upcoming cycle
-    const predictions = symptoms.map(s => {
-        const lastIdx = months.length - 1;
-        const current = processedData[s][months[lastIdx]] || 0;
-        const previous = processedData[s][months[lastIdx - 1]] || 0;
-        const trend = current - previous;
-        const predicted = Math.max(0, Math.round(current + trend));
-        return { symptom: s, predicted, direction: trend > 0 ? '↑' : trend < 0 ? '↓' : '→' };
-    });
-
     return (
         <div className="p-6 lg:p-10 space-y-10 max-w-[1400px] mx-auto">
-            <div>
-                <h1 className="text-3xl font-black tracking-tight" style={{ color: '#1a1a2e' }}>
-                    AI <span style={{ color: '#2E7D32' }}>Insights</span> & Diagnosis
-                </h1>
-                <p className="text-sm mt-1" style={{ color: '#6b7c8a' }}>Convert data into actionable clinical decisions — This is where analysis becomes medicine.</p>
-            </div>
-
-            {/* Diagnosis Cards */}
-            <div className="space-y-6 stagger">
-                {diagnoses.map((d, i) => (
-                    <div key={i} className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden opacity-0 animate-fade-in">
-                        <div className="flex flex-col lg:flex-row">
-                            {/* Left: Diagnosis */}
-                            <div className="flex-1 p-8 lg:p-10">
-                                <div className="flex items-start gap-4 mb-6">
-                                    <div>
-                                        <div className="flex items-center gap-3">
-                                            <h3 className="text-xl font-black" style={{ color: '#1a1a2e' }}>{d.condition}</h3>
-                                            <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase" style={{
-                                                background: d.severity === 'high' ? '#FFEBEE' : d.severity === 'medium' ? '#FFF3E0' : '#E8F5E9',
-                                                color: d.severity === 'high' ? '#C62828' : d.severity === 'medium' ? '#E65100' : '#2E7D32'
-                                            }}>{d.severity} risk</span>
-                                        </div>
-                                        <p className="text-xs mt-1" style={{ color: '#6b7c8a' }}>{d.trigger}</p>
-                                    </div>
-                                </div>
-
-                                {/* Confidence Bar */}
-                                <div className="mb-6">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#9e9e9e' }}>Confidence</span>
-                                        <span className="text-sm font-black" style={{ color: '#2E7D32' }}>{d.confidence}%</span>
-                                    </div>
-                                    <div className="h-3 rounded-full overflow-hidden" style={{ background: '#E8F5E9' }}>
-                                        <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${d.confidence}%`, background: '#2E7D32' }} />
-                                    </div>
-                                </div>
-
-                                <p className="text-xs px-4 py-3 rounded-2xl italic" style={{ background: '#F1F8F4', color: '#6b7c8a' }}>
-                                    Detected in: <strong>{d.month}</strong>
-                                </p>
-                            </div>
-
-                            {/* Right: Treatment */}
-                            {d.treatment && (
-                                <div className="lg:w-96 p-8 lg:p-10 border-t lg:border-t-0 lg:border-l border-gray-100" style={{ background: '#F1F8F4' }}>
-                                    <p className="text-[10px] font-black uppercase tracking-widest mb-4" style={{ color: '#2E7D32' }}>Recommended Protocol</p>
-                                    <div className="space-y-4">
-                                        <div>
-                                            <p className="text-[10px] font-bold uppercase mb-1" style={{ color: '#9e9e9e' }}>Treatment</p>
-                                            <p className="text-xs font-medium" style={{ color: '#1a1a2e' }}>{d.treatment.curing}</p>
-                                        </div>
-                                        <div>
-                                            <p className="text-[10px] font-bold uppercase mb-1" style={{ color: '#9e9e9e' }}>Medicine</p>
-                                            <p className="text-xs font-medium" style={{ color: '#1a1a2e' }}>{d.treatment.medicine}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div>
+                    <h1 className="text-3xl font-black tracking-tight" style={{ color: '#1a1a2e' }}>
+                        AI <span style={{ color: '#2E7D32' }}>Intelligence</span> Center
+                    </h1>
+                    <p className="text-sm mt-1" style={{ color: '#6b7c8a' }}>Cross-referencing trends against {knowledge.diseases.length} medical conditions.</p>
+                </div>
+                
+                {/* Search Bar */}
+                <div className="relative w-full md:w-96">
+                    <input 
+                        type="text" 
+                        placeholder="Search detected conditions..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full px-6 py-3 rounded-2xl bg-white border border-slate-200 shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                    />
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-30">
+                        <svg width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" fill="none">
+                            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                        </svg>
                     </div>
-                ))}
+                </div>
             </div>
 
             {/* AI Insight Generator */}
-            <div className="rounded-3xl p-8 lg:p-10 shadow-lg text-white" style={{ background: '#1a1a2e' }}>
-                <h3 className="text-sm font-black uppercase tracking-wider mb-6" style={{ color: '#66BB6A' }}>AI Insight Generator</h3>
-                <div className="space-y-4 stagger">
-                    {aiInsights.map((insight, i) => (
-                        <div key={i} className="px-5 py-4 rounded-2xl text-sm font-medium opacity-0 animate-fade-in" style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.8)' }}>
-                            {insight}
+            <div className="rounded-[2.5rem] p-10 shadow-2xl text-white bg-emerald-950 border border-emerald-900 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-10 opacity-5">
+                    <svg width="200" height="200" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12,2L4.5,20.29L5.21,21L12,18L18.79,21L19.5,20.29L12,2Z" />
+                    </svg>
+                </div>
+                
+                <div className="relative z-10">
+                    <div className="flex items-center justify-between mb-8">
+                        <div>
+                            <h3 className="text-xs font-black uppercase tracking-widest text-emerald-400 mb-2">Large Scale Correlation</h3>
+                            <h2 className="text-2xl font-black">AI Observational Analysis</h2>
                         </div>
-                    ))}
+                        <button 
+                            onClick={() => generateRealInsights(processedData)}
+                            disabled={generating}
+                            className={`px-6 py-2 rounded-xl font-bold text-xs transition-all ${generating ? 'bg-emerald-900' : 'bg-emerald-600 hover:bg-emerald-500 shadow-xl shadow-emerald-900/40'}`}
+                        >
+                            {generating ? 'Scanning Library...' : 'Generate Global Insights'}
+                        </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {aiInsights.length > 0 ? aiInsights.map((insight, i) => (
+                            <div key={i} className="px-6 py-5 rounded-3xl bg-white/5 border border-white/10 hover:border-emerald-500/50 transition-colors group">
+                                <p className="text-sm text-emerald-50/80 group-hover:text-white transition-colors">
+                                    <span className="text-emerald-400 font-black mr-2">●</span>
+                                    {insight}
+                                </p>
+                            </div>
+                        )) : (
+                            <div className="col-span-2 text-center py-10 text-emerald-800 italic">
+                                Ready to analyze {knowledge.diseases.length} condition variations...
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 
-            {/* April Prediction */}
-            <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
-                <h3 className="text-sm font-black uppercase tracking-wider mb-2" style={{ color: '#1a1a2e' }}>Next Month Prediction (April 2026)</h3>
-                <p className="text-xs mb-6" style={{ color: '#6b7c8a' }}>Based on linear trend extrapolation from Jan-Mar data</p>
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 stagger">
-                    {predictions.map((p, i) => {
-                        const color = p.direction === '↑' ? '#E53935' : p.direction === '↓' ? '#2E7D32' : '#9e9e9e';
-                        return (
-                            <div key={i} className="text-center p-5 rounded-2xl border border-gray-100 opacity-0 animate-fade-in hover:shadow-md transition-shadow">
-                                <p className="text-xs font-bold mb-2" style={{ color: '#6b7c8a' }}>{p.symptom}</p>
-                                <p className="text-3xl font-black" style={{ color }}>{p.direction}</p>
-                                <p className="text-lg font-black mt-1" style={{ color: '#1a1a2e' }}>~{p.predicted}</p>
-                                <p className="text-xs font-bold" style={{ color: '#6b7c8a' }}>predicted</p>
-                            </div>
-                        );
-                    })}
+            {/* Diagnosis Cards */}
+            <div className="space-y-6">
+                <div className="flex items-center justify-between px-2">
+                    <h3 className="text-sm font-black uppercase tracking-wider text-slate-800">Detected Clinical Correlations ({filteredDiagnoses.length})</h3>
                 </div>
+                
+                {filteredDiagnoses.length > 0 ? (
+                    <div className="grid grid-cols-1 gap-6">
+                        {filteredDiagnoses.map((d, i) => (
+                            <div key={i} className="bg-white rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden group hover:shadow-2xl transition-all">
+                                <div className="flex flex-col lg:flex-row">
+                                    <div className="flex-1 p-8">
+                                        <div className="flex items-start justify-between mb-8">
+                                            <div>
+                                                <div className="flex items-center gap-3">
+                                                    <h3 className="text-2xl font-black text-slate-900">{d.condition}</h3>
+                                                    <span className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
+                                                        d.severity === 'High' ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600'
+                                                    }`}>{d.severity} Alert</span>
+                                                </div>
+                                                <p className="text-xs text-slate-400 mt-2 font-medium uppercase tracking-tight">{d.trigger}</p>
+                                            </div>
+                                            <div className="text-right">
+                                                <span className="text-[10px] font-black text-slate-400 uppercase block mb-1">Detected In</span>
+                                                <span className="text-xl font-black text-emerald-600">{d.month}</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="mb-4">
+                                            <div className="flex items-center justify-between mb-3 text-[10px] font-black uppercase text-slate-400">
+                                                <span>Diagnostic Match Probability</span>
+                                                <span>{d.confidence}%</span>
+                                            </div>
+                                            <div className="h-2 rounded-full bg-slate-50 overflow-hidden">
+                                                <div className="h-full bg-emerald-500 rounded-full transition-all duration-1000" style={{ width: `${d.confidence}%` }} />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {d.treatment && (
+                                        <div className="lg:w-[450px] bg-slate-50 p-8 border-l border-slate-100 flex flex-col justify-center">
+                                            <div className="space-y-4">
+                                                <div>
+                                                    <p className="text-[10px] font-bold text-emerald-600 uppercase mb-1">Immediate Action</p>
+                                                    <p className="text-xs font-bold text-slate-800 leading-relaxed">{d.treatment.curing}</p>
+                                                </div>
+                                                <div className="pt-2 border-t border-slate-200">
+                                                    <p className="text-[10px] font-bold text-blue-600 uppercase mb-1">Pharmacology/Therapy</p>
+                                                    <p className="text-xs font-bold text-slate-800 leading-relaxed">{d.treatment.medicine}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-20 bg-slate-50 rounded-[2rem] border-2 border-dashed border-slate-200">
+                        <p className="text-slate-400 font-medium">No correlations matching "{searchTerm}"</p>
+                    </div>
+                )}
             </div>
         </div>
     );

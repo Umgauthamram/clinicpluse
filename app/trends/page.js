@@ -68,50 +68,40 @@ export default function TrendsPage() {
         });
     });
 
-    // Correlation: scatter plot pairs (Fever vs Cough, Sneezing vs Itchy Eyes)
-    const correlationPairs = [
-        { x: 'Fever', y: 'Cough', label: 'Fever vs Cough' },
-        { x: 'Sneezing', y: 'Itchy Eyes', label: 'Sneezing vs Itchy Eyes' },
-    ];
-
-    const scatterData = correlationPairs.map(pair => ({
-        ...pair,
-        points: months.map(m => ({
-            x: processedData[pair.x]?.[m] || 0,
-            y: processedData[pair.y]?.[m] || 0,
-            month: m.slice(0, 3)
-        }))
-    }));
+    // Dynamic Correlation Detection
+    const correlationPairs = useMemo(() => {
+        if (!symptoms || symptoms.length < 2) return [];
+        // Pair the top 4 symptoms for comparison
+        const top4 = symptoms.slice(0, 4);
+        return [
+            { x: top4[0], y: top4[1], label: `${top4[0]} vs ${top4[1]}` },
+            { x: top4[2], y: top4[3], label: `${top4[2]} vs ${top4[3]}` }
+        ].filter(p => p.x && p.y);
+    }, [symptoms]);
 
     // Pattern detection logic
-    const patterns = [];
+    const patterns = useMemo(() => {
+        const results = [];
+        months.forEach(m => {
+            // High Volume Alert
+            const monthlyTotal = symptoms.reduce((s, sym) => s + (processedData[sym]?.[m] || 0), 0);
+            if (monthlyTotal > 100) {
+                results.push({ type: 'Critical Volume', detail: `Extreme patient load in ${m} (${monthlyTotal} cases total).`, severity: 'high' });
+            }
 
-    // Check for respiratory spikes in any month
-    const respSymptoms = ['Fever', 'Cough', 'Runny Nose'];
-    months.forEach(m => {
-        const respCount = respSymptoms.reduce((s, sym) => s + (processedData[sym]?.[m] || 0), 0);
-        if (respCount >= 20) {
-            patterns.push({ type: 'Respiratory Cluster', detail: `High respiratory activity in ${m} (${respCount} cases). Potential viral outbreak.`, severity: 'high' });
-        }
-    });
+            // Specific clusters
+            const fever = (processedData['fever']?.[m] || 0) + (processedData['Fever']?.[m] || 0);
+            const inflammation = (processedData['inflammation']?.[m] || 0) + (processedData['pain']?.[m] || 0);
 
-    // Allergy cluster
-    months.forEach(m => {
-        const allergyCount = (processedData['Itchy Eyes']?.[m] || 0) + (processedData['Sneezing']?.[m] || 0);
-        if (allergyCount >= 15) {
-            patterns.push({ type: 'Allergy Cluster', detail: `${m} saw ${allergyCount} combined allergy cases. Seasonal trigger detected.`, severity: 'medium' });
-        }
-    });
-
-    // Overall trend comparison
-    const firstMonthTotal = symptoms.reduce((s, sym) => s + (processedData[sym]?.[months[0]] || 0), 0);
-    const lastMonthTotal = symptoms.reduce((s, sym) => s + (processedData[sym]?.[months[months.length - 1]] || 0), 0);
-
-    if (lastMonthTotal < firstMonthTotal) {
-        patterns.push({ type: 'Overall Recovery', detail: `Cases in ${months[months.length - 1]} (${lastMonthTotal}) show decline from early ${months[0]} levels.`, severity: 'low' });
-    } else {
-        patterns.push({ type: 'Increasing Demand', detail: `Clinic volume in ${months[months.length - 1]} is higher than starting period.`, severity: 'medium' });
-    }
+            if (fever > 15) {
+                results.push({ type: 'Pyrexia Cluster', detail: `Significant fever spike in ${m}. Potential viral vector.`, severity: 'high' });
+            }
+            if (inflammation > 10) {
+                results.push({ type: 'Inflammatory Wave', detail: `Rising tissue sensitivity or swelling reported in ${m}.`, severity: 'medium' });
+            }
+        });
+        return results;
+    }, [processedData, symptoms, months]);
 
     // Month comparison
     const monthData = months.map(m => ({

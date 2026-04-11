@@ -7,11 +7,20 @@ export default function AnalysisPage() {
     const [selected, setSelected] = useState('Fever');
     const [loading, setLoading] = useState(true);
 
+    const [knowledge, setKnowledge] = useState(null);
+
     useEffect(() => {
-        fetch('/clinic_insight.json')
-            .then(res => res.json())
-            .then(d => { setData(d); setLoading(false); })
-            .catch(() => setLoading(false));
+        Promise.all([
+            fetch('/clinic_insight.json').then(res => res.json()),
+            fetch('/medical_knowledge.json').then(res => res.json())
+        ]).then(([d, k]) => {
+            setData(d);
+            setKnowledge(k);
+            // Default select the most frequent symptom
+            const symptoms = Object.keys(d);
+            if (symptoms.length > 0) setSelected(symptoms[0]);
+            setLoading(false);
+        }).catch(() => setLoading(false));
     }, []);
 
     if (loading || !data) return (
@@ -72,6 +81,14 @@ export default function AnalysisPage() {
         Average: avgPerMonth[i]
     }));
 
+    // Find medical context for the selected symptom
+    const associatedDiseases = useMemo(() => {
+        if (!knowledge || !selected) return [];
+        return knowledge.diseases.filter(d => 
+            d.symptoms.some(s => s.toLowerCase() === selected.toLowerCase())
+        ).slice(0, 2); // Show top 2 associated conditions
+    }, [knowledge, selected]);
+
     return (
         <div className="p-6 lg:p-10 space-y-8 max-w-[1400px] mx-auto">
             <div>
@@ -100,23 +117,35 @@ export default function AnalysisPage() {
             </div>
 
             {/* Selected Symptom Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                <div className="rounded-3xl p-6 text-white shadow-lg relative overflow-hidden" style={{ background: '#2E7D32' }}>
-                    <div className="absolute -right-4 -bottom-4 w-20 h-20 rounded-full opacity-20" style={{ background: '#A5D6A7' }} />
-                    <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#A5D6A7' }}>Total Reports</p>
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <div className="rounded-3xl p-6 text-white shadow-lg relative overflow-hidden" style={{ background: '#1B5E20' }}>
+                    <p className="text-[10px] font-black uppercase tracking-widest opacity-70">Total Reports</p>
                     <p className="text-4xl font-black mt-2">{selectedTotal}</p>
-                    <p className="text-xs mt-1 text-white/60">{selected} across Q1</p>
+                    <p className="text-xs mt-1 opacity-60">Cases across Q1</p>
                 </div>
                 <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100">
-                    <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#9e9e9e' }}>Peak Month</p>
-                    <p className="text-2xl font-black mt-2" style={{ color: '#1a1a2e' }}>{peakMonth.month}</p>
-                    <p className="text-xs mt-1" style={{ color: '#6b7c8a' }}>{peakMonth.count} cases</p>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Peak Volume</p>
+                    <p className="text-2xl font-black mt-2 text-slate-900">{peakMonth.month}</p>
+                    <p className="text-xs mt-1 text-slate-400">{peakMonth.count} cases</p>
                 </div>
-                <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100">
-                    <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#9e9e9e' }}>Avg / Month</p>
-                    <p className="text-2xl font-black mt-2" style={{ color: '#1a1a2e' }}>{(selectedTotal / 3).toFixed(1)}</p>
-                    <p className="text-xs mt-1" style={{ color: '#6b7c8a' }}>cases per month</p>
-                </div>
+                
+                {associatedDiseases.map((ad, idx) => (
+                    <div key={idx} className="bg-white rounded-3xl p-6 shadow-lg border border-emerald-100 relative group overflow-hidden">
+                        <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <span className="text-4xl font-black">?</span>
+                        </div>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600">Library Correlation</p>
+                        <p className="text-lg font-black mt-2 text-slate-900 line-clamp-1">{ad.name}</p>
+                        <p className="text-[10px] mt-1 text-slate-400 line-clamp-2">{ad.curing}</p>
+                    </div>
+                ))}
+
+                {associatedDiseases.length === 0 && (
+                    <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100 col-span-2">
+                         <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Medical Insight</p>
+                         <p className="text-sm font-medium mt-2 text-slate-600 italic">Scanning global database for {selected} symptoms...</p>
+                    </div>
+                )}
             </div>
 
             {/* Charts */}

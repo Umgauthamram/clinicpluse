@@ -13,6 +13,10 @@ import {
     Cell,
     PieChart,
     Pie,
+    LineChart,
+    Line,
+    AreaChart,
+    Area,
 } from 'recharts';
 
 const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#64748b'];
@@ -36,140 +40,162 @@ const AdvancedAnalytics = () => {
         fetchData();
     }, []);
 
-    // Data Transformation for Bar Chart (Total per Symptom)
-    const barData = useMemo(() => {
-        if (!data) return [];
-        return Object.entries(data).map(([name, months]) => ({
-            name,
-            total: Object.values(months).reduce((a, b) => a + b, 0),
-        })).sort((a, b) => b.total - a.total);
+    // Helper to process raw array data if needed
+    const processedData = useMemo(() => {
+        if (!data) return null;
+        if (Array.isArray(data)) {
+            const aggregated = {};
+            data.forEach(record => {
+                const s = record.Symptom;
+                const m = record.Month;
+                if (s && m) {
+                    if (!aggregated[s]) aggregated[s] = {};
+                    aggregated[s][m] = (aggregated[s][m] || 0) + 1;
+                }
+            });
+            return aggregated;
+        }
+        return data;
     }, [data]);
 
-    // Data Transformation for Pie Chart (Distribution)
-    const pieData = useMemo(() => {
-        return barData.slice(0, 5); // Top 5 for clarity
-    }, [barData]);
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const activeMonths = useMemo(() => {
+        if (!processedData) return [];
+        return months.filter(m => 
+            Object.values(processedData).some(s => s[m] !== undefined)
+        );
+    }, [processedData]);
 
-    // Data for the List Section
-    const detailedList = useMemo(() => {
-        if (!data) return [];
-        const months = ['January', 'February', 'March'];
-        return Object.entries(data).map(([symptom, values]) => ({
-            symptom,
-            jan: values.January || 0,
-            feb: values.February || 0,
-            mar: values.March || 0,
-            total: Object.values(values).reduce((a, b) => a + b, 0)
+    // Data for Fever vs Cough
+    const feverVsCoughData = useMemo(() => {
+        if (!processedData) return [];
+        return activeMonths.map(m => ({
+            month: m.slice(0, 3),
+            Fever: processedData['Fever']?.[m] || 0,
+            Cough: processedData['Cough']?.[m] || 0,
         }));
-    }, [data]);
+    }, [processedData, activeMonths]);
 
-    if (loading) return null;
+    // Data for Sneezing vs Itchy Eyes
+    const sneezeVsItchyData = useMemo(() => {
+        if (!processedData) return [];
+        return activeMonths.map(m => ({
+            month: m.slice(0, 3),
+            Sneezing: processedData['Sneezing']?.[m] || 0,
+            'Itchy Eyes': processedData['Itchy Eyes']?.[m] || 0,
+        }));
+    }, [processedData, activeMonths]);
+
+    // Data for Fever Monthly Trend
+    const feverTrendData = useMemo(() => {
+        if (!processedData) return [];
+        return activeMonths.map(m => ({
+            month: m.slice(0, 3),
+            cases: processedData['Fever']?.[m] || 0,
+        }));
+    }, [processedData, activeMonths]);
+
+    // Data for Fever vs Average
+    const feverVsAverageData = useMemo(() => {
+        if (!processedData) return [];
+        const symptoms = Object.keys(processedData);
+        return activeMonths.map(m => {
+            const fever = processedData['Fever']?.[m] || 0;
+            const total = symptoms.reduce((sum, s) => sum + (processedData[s][m] || 0), 0);
+            const average = total / symptoms.length;
+            return {
+                month: m.slice(0, 3),
+                Fever: fever,
+                Average: Math.round(average),
+            };
+        });
+    }, [processedData, activeMonths]);
+
+    if (loading || !processedData) return null;
 
     return (
         <div className="space-y-12 py-12">
-            {/* Charts Grid */}
+            {/* Row 1: Symptom Comparisons */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Bar Chart: Symptom Volume */}
-                <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm transition-all hover:shadow-md animate-fade-in" style={{ animationDelay: '0.1s' }}>
-                    <h3 className="text-lg font-bold text-slate-800 mb-6">Total Case Volume by Symptom</h3>
+                {/* Fever vs Cough Comparison */}
+                <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <h3 className="text-lg font-bold text-slate-800 mb-6 font-primary">Fever vs Cough Comparison</h3>
                     <div className="h-80 w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={barData}>
+                            <BarChart data={feverVsCoughData}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                                <XAxis
-                                    dataKey="name"
-                                    axisLine={false}
-                                    tickLine={false}
-                                    tick={{ fill: '#64748b', fontSize: 12 }}
-                                    interval={0}
-                                />
-                                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 12 }} />
-                                <Tooltip
-                                    cursor={{ fill: '#f8fafc' }}
-                                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
-                                />
-                                <Bar dataKey="total" radius={[6, 6, 0, 0]}>
-                                    {barData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                    ))}
-                                </Bar>
+                                <XAxis dataKey="month" axisLine={false} tickLine={false} />
+                                <YAxis axisLine={false} tickLine={false} />
+                                <Tooltip />
+                                <Legend />
+                                <Bar dataKey="Fever" fill="#ef4444" radius={[4, 4, 0, 0]} />
+                                <Bar dataKey="Cough" fill="#3b82f6" radius={[4, 4, 0, 0]} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
                 </div>
 
-                {/* Pie Chart: Distribution */}
-                <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm transition-all hover:shadow-md animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                    <h3 className="text-lg font-bold text-slate-800 mb-6">Top Symptom Distribution</h3>
-                    <div className="h-80 w-full relative">
+                {/* Sneezing vs Itchy Eyes Comparison */}
+                <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <h3 className="text-lg font-bold text-slate-800 mb-6 font-primary">Sneezing vs Itchy Eyes Comparison</h3>
+                    <div className="h-80 w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                            <PieChart>
-                                <Pie
-                                    data={pieData}
-                                    cx="50%"
-                                    cy="50%"
-                                    innerRadius={60}
-                                    outerRadius={100}
-                                    paddingAngle={5}
-                                    dataKey="total"
-                                >
-                                    {pieData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                    ))}
-                                </Pie>
+                            <BarChart data={sneezeVsItchyData}>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                <XAxis dataKey="month" axisLine={false} tickLine={false} />
+                                <YAxis axisLine={false} tickLine={false} />
                                 <Tooltip />
-                                <Legend layout="vertical" align="right" verticalAlign="middle" iconType="circle" />
-                            </PieChart>
+                                <Legend />
+                                <Bar dataKey="Sneezing" fill="#10b981" radius={[4, 4, 0, 0]} />
+                                <Bar dataKey="Itchy Eyes" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                            </BarChart>
                         </ResponsiveContainer>
                     </div>
                 </div>
             </div>
 
-            {/* Data List Section */}
-            <section className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden animate-fade-in" style={{ animationDelay: '0.3s' }}>
-                <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-                    <div>
-                        <h3 className="text-lg font-bold text-slate-800">Clinic Data Ledger</h3>
-                        <p className="text-sm text-slate-500">Comprehensive breakdown of all recorded symptoms.</p>
+            {/* Row 2: Trends and Aggregates */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Fever - Monthly Trend */}
+                <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <h3 className="text-lg font-bold text-slate-800 mb-6 font-primary">Fever — Monthly Trend</h3>
+                    <div className="h-80 w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={feverTrendData}>
+                                <defs>
+                                    <linearGradient id="colorFever" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#ef4444" stopOpacity={0.1}/>
+                                        <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                <XAxis dataKey="month" axisLine={false} tickLine={false} />
+                                <YAxis axisLine={false} tickLine={false} />
+                                <Tooltip />
+                                <Area type="monotone" dataKey="cases" stroke="#ef4444" fillOpacity={1} fill="url(#colorFever)" strokeWidth={3} />
+                            </AreaChart>
+                        </ResponsiveContainer>
                     </div>
-                    <button className="px-4 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors shadow-sm">
-                        Export JSON
-                    </button>
                 </div>
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left">
-                        <thead>
-                            <tr className="text-gray-400 text-xs uppercase tracking-wider">
-                                <th className="px-8 py-4 font-semibold">Symptom Name</th>
-                                <th className="px-8 py-4 font-semibold">January</th>
-                                <th className="px-8 py-4 font-semibold">February</th>
-                                <th className="px-8 py-4 font-semibold">March</th>
-                                <th className="px-8 py-4 font-semibold text-right">Aggregate</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100">
-                            {detailedList.map((item) => (
-                                <tr key={item.symptom} className="hover:bg-slate-50/80 transition-colors group">
-                                    <td className="px-8 py-4">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-                                            <span className="font-semibold text-slate-700">{item.symptom}</span>
-                                        </div>
-                                    </td>
-                                    <td className="px-8 py-4 text-slate-500 font-medium">{item.jan}</td>
-                                    <td className="px-8 py-4 text-slate-500 font-medium">{item.feb}</td>
-                                    <td className="px-8 py-4 text-slate-500 font-medium">{item.mar}</td>
-                                    <td className="px-8 py-4 text-right">
-                                        <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-bold text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
-                                            {item.total}
-                                        </span>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+
+                {/* Fever vs Average */}
+                <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <h3 className="text-lg font-bold text-slate-800 mb-6 font-primary">Fever vs Average</h3>
+                    <div className="h-80 w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <LineChart data={feverVsAverageData}>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                <XAxis dataKey="month" axisLine={false} tickLine={false} />
+                                <YAxis axisLine={false} tickLine={false} />
+                                <Tooltip />
+                                <Legend />
+                                <Line type="monotone" dataKey="Fever" stroke="#ef4444" strokeWidth={3} dot={{ r: 6 }} />
+                                <Line type="monotone" dataKey="Average" stroke="#94a3b8" strokeDasharray="5 5" strokeWidth={2} dot={{ r: 0 }} />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
                 </div>
-            </section>
+            </div>
         </div>
     );
 };
