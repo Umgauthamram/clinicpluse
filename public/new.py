@@ -1,7 +1,7 @@
 import pandas as pd
 from google.colab import files
 
-# 1. Your JSON Data
+# 1. Your JSON Data here
 json_data = {
     "Body Ache": {"February": 1, "January": 2, "March": 1},
     "Cough": {"February": 2, "January": 5, "March": 2},
