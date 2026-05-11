@@ -8,8 +8,9 @@ const navItems = [
     { href: '/analysis', label: 'Analysis', desc: 'Symptom Deep Dive' },
     { href: '/trends', label: 'Trends', desc: 'Patterns & Spikes' },
     { href: '/insights', label: 'AI Insights', desc: 'Diagnosis Engine' },
+    { href: '/nlp', label: 'Smart Notes', desc: 'NLP Extraction' },
     { href: '/upload', label: 'Upload', desc: 'Import Data' },
-    { href: '/reports', label: 'Reports', desc: 'Export PDF' },
+    { href: '/reports', label: 'Reports', desc: 'Export Report' },
 ];
 
 export default function Sidebar() {

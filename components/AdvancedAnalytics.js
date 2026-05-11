@@ -66,88 +66,109 @@ const AdvancedAnalytics = () => {
         );
     }, [processedData]);
 
-    // Data for Fever vs Cough
-    const feverVsCoughData = useMemo(() => {
+    // Dynamically pick the top 4 symptoms by total volume instead of hardcoding
+    const rankedSymptoms = useMemo(() => {
         if (!processedData) return [];
-        return activeMonths.map(m => ({
-            month: m.slice(0, 3),
-            Fever: processedData['Fever']?.[m] || 0,
-            Cough: processedData['Cough']?.[m] || 0,
-        }));
+        return Object.keys(processedData)
+            .map(s => ({
+                name: s,
+                total: activeMonths.reduce((sum, m) => sum + (processedData[s][m] || 0), 0)
+            }))
+            .sort((a, b) => b.total - a.total);
     }, [processedData, activeMonths]);
 
-    // Data for Sneezing vs Itchy Eyes
-    const sneezeVsItchyData = useMemo(() => {
-        if (!processedData) return [];
+    // Dynamic comparison pairs from top 4 symptoms
+    const pair1Data = useMemo(() => {
+        if (!processedData || rankedSymptoms.length < 2) return [];
+        const s1 = rankedSymptoms[0].name;
+        const s2 = rankedSymptoms[1].name;
         return activeMonths.map(m => ({
             month: m.slice(0, 3),
-            Sneezing: processedData['Sneezing']?.[m] || 0,
-            'Itchy Eyes': processedData['Itchy Eyes']?.[m] || 0,
+            [s1]: processedData[s1]?.[m] || 0,
+            [s2]: processedData[s2]?.[m] || 0,
         }));
-    }, [processedData, activeMonths]);
+    }, [processedData, activeMonths, rankedSymptoms]);
 
-    // Data for Fever Monthly Trend
-    const feverTrendData = useMemo(() => {
-        if (!processedData) return [];
+    const pair2Data = useMemo(() => {
+        if (!processedData || rankedSymptoms.length < 4) return [];
+        const s3 = rankedSymptoms[2].name;
+        const s4 = rankedSymptoms[3].name;
         return activeMonths.map(m => ({
             month: m.slice(0, 3),
-            cases: processedData['Fever']?.[m] || 0,
+            [s3]: processedData[s3]?.[m] || 0,
+            [s4]: processedData[s4]?.[m] || 0,
         }));
-    }, [processedData, activeMonths]);
+    }, [processedData, activeMonths, rankedSymptoms]);
 
-    // Data for Fever vs Average
-    const feverVsAverageData = useMemo(() => {
-        if (!processedData) return [];
+    // Data for Top Symptom Monthly Trend (dynamic)
+    const topSymptomTrendData = useMemo(() => {
+        if (!processedData || rankedSymptoms.length === 0) return [];
+        const topName = rankedSymptoms[0].name;
+        return activeMonths.map(m => ({
+            month: m.slice(0, 3),
+            cases: processedData[topName]?.[m] || 0,
+        }));
+    }, [processedData, activeMonths, rankedSymptoms]);
+
+    // Data for Top Symptom vs Average (dynamic)
+    const topVsAverageData = useMemo(() => {
+        if (!processedData || rankedSymptoms.length === 0) return [];
+        const topName = rankedSymptoms[0].name;
         const symptoms = Object.keys(processedData);
         return activeMonths.map(m => {
-            const fever = processedData['Fever']?.[m] || 0;
+            const topVal = processedData[topName]?.[m] || 0;
             const total = symptoms.reduce((sum, s) => sum + (processedData[s][m] || 0), 0);
             const average = total / symptoms.length;
             return {
                 month: m.slice(0, 3),
-                Fever: fever,
+                [topName]: topVal,
                 Average: Math.round(average),
             };
         });
-    }, [processedData, activeMonths]);
+    }, [processedData, activeMonths, rankedSymptoms]);
 
-    if (loading || !processedData) return null;
+    if (loading || !processedData || rankedSymptoms.length < 4) return null;
+
+    const s1 = rankedSymptoms[0].name;
+    const s2 = rankedSymptoms[1].name;
+    const s3 = rankedSymptoms[2].name;
+    const s4 = rankedSymptoms[3].name;
 
     return (
         <div className="space-y-12 py-12">
             {/* Row 1: Symptom Comparisons */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Fever vs Cough Comparison */}
+                {/* Top 1 vs Top 2 Comparison */}
                 <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
-                    <h3 className="text-lg font-bold text-slate-800 mb-6 font-primary">Fever vs Cough Comparison</h3>
+                    <h3 className="text-lg font-bold text-slate-800 mb-6 font-primary">{s1} vs {s2} Comparison</h3>
                     <div className="h-80 w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={feverVsCoughData}>
+                            <BarChart data={pair1Data}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                                 <XAxis dataKey="month" axisLine={false} tickLine={false} />
                                 <YAxis axisLine={false} tickLine={false} />
                                 <Tooltip />
                                 <Legend />
-                                <Bar dataKey="Fever" fill="#ef4444" radius={[4, 4, 0, 0]} />
-                                <Bar dataKey="Cough" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                                <Bar dataKey={s1} fill="#ef4444" radius={[4, 4, 0, 0]} />
+                                <Bar dataKey={s2} fill="#3b82f6" radius={[4, 4, 0, 0]} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
                 </div>
 
-                {/* Sneezing vs Itchy Eyes Comparison */}
+                {/* Top 3 vs Top 4 Comparison */}
                 <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
-                    <h3 className="text-lg font-bold text-slate-800 mb-6 font-primary">Sneezing vs Itchy Eyes Comparison</h3>
+                    <h3 className="text-lg font-bold text-slate-800 mb-6 font-primary">{s3} vs {s4} Comparison</h3>
                     <div className="h-80 w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={sneezeVsItchyData}>
+                            <BarChart data={pair2Data}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                                 <XAxis dataKey="month" axisLine={false} tickLine={false} />
                                 <YAxis axisLine={false} tickLine={false} />
                                 <Tooltip />
                                 <Legend />
-                                <Bar dataKey="Sneezing" fill="#10b981" radius={[4, 4, 0, 0]} />
-                                <Bar dataKey="Itchy Eyes" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                                <Bar dataKey={s3} fill="#10b981" radius={[4, 4, 0, 0]} />
+                                <Bar dataKey={s4} fill="#8b5cf6" radius={[4, 4, 0, 0]} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
@@ -156,14 +177,14 @@ const AdvancedAnalytics = () => {
 
             {/* Row 2: Trends and Aggregates */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Fever - Monthly Trend */}
+                {/* Top Symptom — Monthly Trend */}
                 <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
-                    <h3 className="text-lg font-bold text-slate-800 mb-6 font-primary">Fever — Monthly Trend</h3>
+                    <h3 className="text-lg font-bold text-slate-800 mb-6 font-primary">{s1} — Monthly Trend</h3>
                     <div className="h-80 w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                            <AreaChart data={feverTrendData}>
+                            <AreaChart data={topSymptomTrendData}>
                                 <defs>
-                                    <linearGradient id="colorFever" x1="0" y1="0" x2="0" y2="1">
+                                    <linearGradient id="colorTop" x1="0" y1="0" x2="0" y2="1">
                                         <stop offset="5%" stopColor="#ef4444" stopOpacity={0.1}/>
                                         <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
                                     </linearGradient>
@@ -172,24 +193,24 @@ const AdvancedAnalytics = () => {
                                 <XAxis dataKey="month" axisLine={false} tickLine={false} />
                                 <YAxis axisLine={false} tickLine={false} />
                                 <Tooltip />
-                                <Area type="monotone" dataKey="cases" stroke="#ef4444" fillOpacity={1} fill="url(#colorFever)" strokeWidth={3} />
+                                <Area type="monotone" dataKey="cases" stroke="#ef4444" fillOpacity={1} fill="url(#colorTop)" strokeWidth={3} />
                             </AreaChart>
                         </ResponsiveContainer>
                     </div>
                 </div>
 
-                {/* Fever vs Average */}
+                {/* Top Symptom vs Average */}
                 <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
-                    <h3 className="text-lg font-bold text-slate-800 mb-6 font-primary">Fever vs Average</h3>
+                    <h3 className="text-lg font-bold text-slate-800 mb-6 font-primary">{s1} vs Average</h3>
                     <div className="h-80 w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                            <LineChart data={feverVsAverageData}>
+                            <LineChart data={topVsAverageData}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                                 <XAxis dataKey="month" axisLine={false} tickLine={false} />
                                 <YAxis axisLine={false} tickLine={false} />
                                 <Tooltip />
                                 <Legend />
-                                <Line type="monotone" dataKey="Fever" stroke="#ef4444" strokeWidth={3} dot={{ r: 6 }} />
+                                <Line type="monotone" dataKey={s1} stroke="#ef4444" strokeWidth={3} dot={{ r: 6 }} />
                                 <Line type="monotone" dataKey="Average" stroke="#94a3b8" strokeDasharray="5 5" strokeWidth={2} dot={{ r: 0 }} />
                             </LineChart>
                         </ResponsiveContainer>

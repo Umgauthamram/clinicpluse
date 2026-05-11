@@ -27,7 +27,10 @@ const MonthlyDiseaseAnalysis = () => {
 
     const analysis = useMemo(() => {
         if (!insights || !knowledge) return [];
-        const months = ['January', 'February', 'March'];
+        // Dynamically detect all months present in the data
+        const allMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const symptoms = Object.keys(insights);
+        const months = allMonths.filter(m => symptoms.some(s => insights[s][m] !== undefined));
 
         return months.map(month => {
             // Find top symptoms for the month
@@ -38,19 +41,29 @@ const MonthlyDiseaseAnalysis = () => {
 
             const topSymptom = monthlyStats[0];
 
-            // Match with diseases based on symptoms
+            // Match diseases whose known symptoms overlap with the top clinical symptoms this month
             const likelyDiseases = knowledge.diseases.filter(disease =>
-                disease.symptoms.includes(topSymptom.symptom) ||
-                (month === 'January' && disease.id === 'influenza' && monthlyStats.find(s => s.symptom === 'Fever')?.count > 5) ||
-                (month === 'February' && disease.id === 'allergic-rhinitis' && monthlyStats.find(s => s.symptom === 'Itchy Eyes')?.count > 5)
+                disease.symptoms.some(ds =>
+                    monthlyStats.slice(0, 3).some(ms => 
+                        ds.toLowerCase().includes(ms.symptom.toLowerCase()) || ms.symptom.toLowerCase().includes(ds.toLowerCase())
+                    ) && monthlyStats.find(ms => ms.symptom.toLowerCase() === ds.toLowerCase())?.count >= 2
+                )
             );
+
+            // Generate a dynamic summary based on the actual data
+            const totalMonthCases = monthlyStats.reduce((s, ms) => s + ms.count, 0);
+            let summary;
+            if (totalMonthCases > 80) summary = 'Critical Volume';
+            else if (topSymptom.count > 15) summary = `${topSymptom.symptom} Surge`;
+            else if (totalMonthCases > 40) summary = 'Elevated Activity';
+            else summary = 'Baseline Activity';
 
             return {
                 month,
                 topSymptom: topSymptom.symptom,
                 count: topSymptom.count,
                 diseases: likelyDiseases,
-                summary: month === 'January' ? "Peak Flu Season" : month === 'February' ? "Allergy Surge" : "Viral Persistence"
+                summary
             };
         });
     }, [insights, knowledge]);

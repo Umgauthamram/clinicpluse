@@ -6,6 +6,7 @@ export default function InsightsPage() {
     const [knowledge, setKnowledge] = useState(null);
     const [loading, setLoading] = useState(true);
     const [aiInsights, setAiInsights] = useState([]);
+    const [aiError, setAiError] = useState('');
     const [generating, setGenerating] = useState(false);
 
     useEffect(() => {
@@ -16,7 +17,6 @@ export default function InsightsPage() {
             setData(d); 
             setKnowledge(k); 
             setLoading(false);
-            generateRealInsights(d);
         })
         .catch(() => setLoading(false));
     }, []);
@@ -40,9 +40,10 @@ export default function InsightsPage() {
 
     const generateRealInsights = async (currentData) => {
         setGenerating(true);
+        setAiError('');
         try {
-            // Create a summary for the AI
-            const summary = Object.entries(currentData).slice(0, 5).map(([s, m]) => 
+            // Create a comprehensive summary for the AI — include ALL symptoms
+            const summary = Object.entries(currentData).map(([s, m]) => 
                 `${s}: ${Object.entries(m).map(([month, count]) => `${month}(${count})`).join(', ')}`
             ).join('; ');
 
@@ -52,9 +53,15 @@ export default function InsightsPage() {
                 body: JSON.stringify({ dataSummary: summary })
             });
             const result = await res.json();
-            setAiInsights(result.insights || []);
+            if (!res.ok) {
+                setAiError(result.error || 'Failed to generate insights.');
+                setAiInsights([]);
+            } else {
+                setAiInsights(result.insights || []);
+            }
         } catch (error) {
             console.error("Failed to generate AI insights:", error);
+            setAiError('Network error. Could not reach the AI engine.');
         } finally {
             setGenerating(false);
         }
@@ -110,8 +117,13 @@ export default function InsightsPage() {
             });
         });
         
-        // Sort by confidence and month recital
-        return results.sort((a, b) => b.confidence - a.confidence);
+        // Sort by most recent month first, then by confidence within each month
+        const monthPriority = [...months].reverse(); // May first, then April, etc.
+        return results.sort((a, b) => {
+            const monthDiff = monthPriority.indexOf(a.month) - monthPriority.indexOf(b.month);
+            if (monthDiff !== 0) return monthDiff;
+            return b.confidence - a.confidence;
+        });
     }, [processedData, knowledge, months]);
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -184,9 +196,14 @@ export default function InsightsPage() {
                                     {insight}
                                 </p>
                             </div>
-                        )) : (
+                        )) : aiError ? (
+                            <div className="col-span-2 text-center py-10">
+                                <p className="text-rose-400 font-bold text-sm mb-2">⚠ {aiError}</p>
+                                <p className="text-emerald-800/50 text-xs">Click "Generate Global Insights" to retry.</p>
+                            </div>
+                        ) : (
                             <div className="col-span-2 text-center py-10 text-emerald-800 italic">
-                                Ready to analyze {knowledge.diseases.length} condition variations...
+                                {generating ? 'Analyzing data...' : `Ready to analyze ${knowledge.diseases.length} condition variations. Click "Generate Global Insights" to begin.`}
                             </div>
                         )}
                     </div>

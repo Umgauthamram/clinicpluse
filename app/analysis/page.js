@@ -120,7 +120,7 @@ export default function AnalysisPage() {
                 <div className="rounded-3xl p-6 text-white shadow-lg relative overflow-hidden" style={{ background: '#1B5E20' }}>
                     <p className="text-[10px] font-black uppercase tracking-widest opacity-70">Total Reports</p>
                     <p className="text-4xl font-black mt-2">{selectedTotal}</p>
-                    <p className="text-xs mt-1 opacity-60">Cases across Q1</p>
+                    <p className="text-xs mt-1 opacity-60">Cases across {months.length} months</p>
                 </div>
                 <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100">
                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Peak Volume</p>

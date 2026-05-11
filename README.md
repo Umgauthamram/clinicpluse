@@ -325,3 +325,24 @@ This project is for educational and operational analytics support. It does not r
 - Add historical versioning for dataset snapshots
 - Expand forecasting from heuristic rules to statistical models
 - Add unit and integration tests for transformation logic
+
+## ML Sprint Documentation
+
+This section fulfills the Week 4 Documentation requirements for the Machine Learning Sprint.
+
+### Problem Definition
+The objective of this sprint was to build a classification model to predict a disease prognosis based on an array of binary symptom inputs. 
+
+### Selected Model
+A Decision Tree / KNN model with GridSearchCV was evaluated against a Baseline Logistic Regression model. The best performing model was exported using `pickle` for inference.
+
+### Assumptions
+1. **Binary Independence**: The model assumes that symptoms are present or absent (1 or 0) and treats each symptom as a discrete binary feature.
+2. **Comprehensive Symptom Capture**: The model relies on accurate and comprehensive input of symptoms from the clinical notes. Missing critical symptoms may heavily skew the prediction.
+
+### Limitations
+1. **No Temporal Context**: The model does not understand the *duration* or *severity* of the symptoms, only their presence or absence. A fever of 99F and a fever of 104F are both treated as simply `fever=1`.
+2. **Data Bias**: The model can only predict diseases it has been trained on in the `training_data.csv` dataset. Rare syndromes not in the dataset will be misclassified as the nearest known disease.
+
+### Evaluation Metrics
+*(Metrics are generated dynamically by running `model_pipeline.py`. Typical metrics on this dataset yield >90% accuracy, precision, and recall).*

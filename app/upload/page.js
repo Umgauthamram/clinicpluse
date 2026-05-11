@@ -178,16 +178,21 @@ export default function UploadPage() {
                 <h3 className="text-sm font-black uppercase tracking-wider mb-4" style={{ color: '#1a1a2e' }}>Expected JSON Format</h3>
                 <pre className="text-xs p-5 rounded-2xl overflow-x-auto font-mono" style={{ background: '#F1F8F4', color: '#2E7D32' }}>
                     {`{
-  "Symptom Name": {
-    "January": <count>,
-    "February": <count>,
-    "March": <count>
+  "symptom_name": {
+    "January": 250,
+    "February": 310,
+    "March": 285,
+    "April": 190,
+    "May": 340
   },
-  ...
+  "another_symptom": {
+    "January": 180,
+    ...
+  }
 }`}
                 </pre>
                 <p className="text-[10px] mt-4 italic" style={{ color: '#9e9e9e' }}>
-                    Each symptom should be a key with monthly counts as nested values.
+                    Each symptom should be a key with monthly patient encounter counts as nested values. Include all months with available data.
                 </p>
             </div>
         </div>

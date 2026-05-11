@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 
-const MONTHS = ['January', 'February', 'March'];
+const ALL_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 const SYMPTOM_COLORS = {
     0: 'bg-white/40 border border-slate-100',
@@ -48,6 +48,8 @@ const SymptomHeatmap = () => {
     if (!data) return <div className="p-8 text-center text-red-500">Failed to load data.</div>;
 
     const symptoms = Object.keys(data);
+    // Dynamically detect which months are present in the data
+    const MONTHS = ALL_MONTHS.filter(m => symptoms.some(s => data[s][m] !== undefined));
     const maxIntensity = 9; // Based on Fever in Jan
 
     return (
