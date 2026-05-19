@@ -344,5 +344,3 @@ A Decision Tree / KNN model with GridSearchCV was evaluated against a Baseline L
 1. **No Temporal Context**: The model does not understand the *duration* or *severity* of the symptoms, only their presence or absence. A fever of 99F and a fever of 104F are both treated as simply `fever=1`.
 2. **Data Bias**: The model can only predict diseases it has been trained on in the `training_data.csv` dataset. Rare syndromes not in the dataset will be misclassified as the nearest known disease.
 
-### Evaluation Metrics
-*(Metrics are generated dynamically by running `model_pipeline.py`. Typical metrics on this dataset yield >90% accuracy, precision, and recall).*
